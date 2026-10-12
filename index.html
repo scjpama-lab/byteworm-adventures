@@ -1,0 +1,2704 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ByteWorm Adventures: Syntax Slayer | Monster Combat & Coding Trivia RPG</title>
+  <meta name="description"
+    content="A Bookworm Adventures-inspired coding trivia and word-puzzle RPG. Battle animated software monsters and crack programming quizzes by forming tech keywords!">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=Outfit:wght@400;500;600;700;800;900&family=Press+Start+2P&display=swap"
+    rel="stylesheet">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Outfit', 'sans-serif'],
+            mono: ['"Fira Code"', 'monospace'],
+            arcade: ['"Press Start 2P"', 'monospace'],
+          },
+          colors: {
+            cyber: {
+              bg: '#0a0d14',
+              surface: '#111726',
+              border: '#1f293d',
+              neonCyan: '#00f3ff',
+              neonPink: '#ff007f',
+              neonGreen: '#05ffa1',
+              neonYellow: '#ffe600',
+              neonPurple: '#b026ff',
+              glow: 'rgba(0, 243, 255, 0.4)',
+            }
+          },
+          keyframes: {
+            glowPulse: {
+              '0%, 100%': { filter: 'drop-shadow(0 0 12px rgba(0, 243, 255, 0.6))' },
+              '50%': { filter: 'drop-shadow(0 0 24px rgba(176, 38, 255, 0.8))' },
+            },
+            glitch: {
+              '0%, 100%': { transform: 'translate(0)' },
+              '20%': { transform: 'translate(-2px, 2px)' },
+              '40%': { transform: 'translate(-2px, -2px)' },
+              '60%': { transform: 'translate(2px, 2px)' },
+              '80%': { transform: 'translate(2px, -2px)' },
+            },
+            float: {
+              '0%, 100%': { transform: 'translateY(0px)' },
+              '50%': { transform: 'translateY(-6px)' },
+            },
+            monsterFloat: {
+              '0%, 100%': { transform: 'translateY(0px) rotate(0deg)' },
+              '50%': { transform: 'translateY(-8px) rotate(1deg)' },
+            },
+            slimeWobble: {
+              '0%, 100%': { transform: 'scale(1, 1)' },
+              '35%': { transform: 'scale(1.08, 0.92)' },
+              '65%': { transform: 'scale(0.94, 1.06)' },
+            },
+            spiderTwitch: {
+              '0%, 100%': { transform: 'translateY(0)' },
+              '25%': { transform: 'translateY(-3px)' },
+              '50%': { transform: 'translateY(2px)' },
+              '75%': { transform: 'translateY(-2px)' },
+            },
+            phantomDrift: {
+              '0%, 100%': { transform: 'translateY(0px) scale(1)' },
+              '50%': { transform: 'translateY(-10px) scale(1.03)' },
+            },
+            dragonHover: {
+              '0%, 100%': { transform: 'translateY(0px) scale(1)' },
+              '50%': { transform: 'translateY(-7px) scale(1.02)' },
+            }
+          },
+          animation: {
+            glowPulse: 'glowPulse 3s infinite',
+            glitch: 'glitch 0.3s ease-in-out',
+            float: 'float 3s ease-in-out infinite',
+            monsterFloat: 'monsterFloat 3.5s ease-in-out infinite',
+            slimeWobble: 'slimeWobble 2s ease-in-out infinite',
+            spiderTwitch: 'spiderTwitch 2.5s ease-in-out infinite',
+            phantomDrift: 'phantomDrift 3s ease-in-out infinite',
+            dragonHover: 'dragonHover 2.8s ease-in-out infinite',
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Custom arcade and retro-cyber styling */
+    :root {
+      --cyber-cyan: #00f3ff;
+      --cyber-pink: #ff007f;
+      --cyber-green: #05ffa1;
+      --cyber-purple: #b026ff;
+      --cyber-amber: #ffe600;
+    }
+
+    body {
+      background-color: #07090e;
+      background-image:
+        radial-gradient(circle at 15% 15%, rgba(176, 38, 255, 0.1) 0%, transparent 40%),
+        radial-gradient(circle at 85% 20%, rgba(255, 0, 127, 0.1) 0%, transparent 40%),
+        radial-gradient(circle at 50% 80%, rgba(0, 243, 255, 0.08) 0%, transparent 40%),
+        linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+      background-size: 100% 100%, 100% 100%, 100% 100%, 32px 32px, 32px 32px;
+      user-select: none;
+    }
+
+    /* Scanlines effect (vintage CRT monitor) */
+    .crt-overlay::before {
+      content: " ";
+      display: block;
+      position: absolute;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      right: 0;
+      background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%);
+      background-size: 100% 4px;
+      z-index: 40;
+      pointer-events: none;
+      opacity: 0.3;
+    }
+
+    /* Tactile 3D Arcade Letter Tile */
+    .arcade-tile {
+      transition: all 0.15s cubic-bezier(0.34, 1.56, 0.64, 1);
+      box-shadow: 0 6px 0 #0f172a, 0 10px 15px -3px rgba(0, 0, 0, 0.6);
+      transform-style: preserve-3d;
+    }
+
+    .arcade-tile:hover:not(:disabled) {
+      transform: translateY(-4px);
+      box-shadow: 0 10px 0 #0f172a, 0 14px 20px -2px rgba(0, 243, 255, 0.35);
+    }
+
+    .arcade-tile:active:not(:disabled) {
+      transform: translateY(2px);
+      box-shadow: 0 2px 0 #0f172a, 0 4px 6px -1px rgba(0, 0, 0, 0.5);
+    }
+
+    .arcade-tile.selected {
+      opacity: 0.3;
+      transform: scale(0.92);
+      pointer-events: none;
+      box-shadow: 0 2px 0 #0f172a;
+    }
+
+    /* Gem tile variants */
+    .gem-diamond {
+      background: linear-gradient(135deg, #0ea5e9, #38bdf8, #bae6fd);
+      border-color: #7dd3fc;
+      color: #082f49;
+    }
+
+    .gem-ruby {
+      background: linear-gradient(135deg, #e11d48, #f43f5e, #fda4af);
+      border-color: #fb7185;
+      color: #4c0519;
+    }
+
+    .gem-sapphire {
+      background: linear-gradient(135deg, #4f46e5, #6366f1, #c7d2fe);
+      border-color: #818cf8;
+      color: #1e1b4b;
+    }
+
+    .gem-emerald {
+      background: linear-gradient(135deg, #059669, #10b981, #a7f3d0);
+      border-color: #34d399;
+      color: #022c22;
+    }
+
+    .gem-gold {
+      background: linear-gradient(135deg, #d97706, #fbbf24, #fef3c7);
+      border-color: #fcd34d;
+      color: #451a03;
+    }
+
+    /* Word Slot Tile in tray */
+    .word-slot-tile {
+      animation: popIn 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+      box-shadow: 0 4px 0 #0f172a, 0 6px 12px rgba(0, 243, 255, 0.25);
+    }
+
+    @keyframes popIn {
+      0% {
+        transform: scale(0.5);
+        opacity: 0;
+      }
+
+      100% {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+
+    /* Shake animation for invalid words */
+    .shake-error {
+      animation: shake 0.4s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+    }
+
+    @keyframes shake {
+
+      10%,
+      90% {
+        transform: translate3d(-2px, 0, 0);
+      }
+
+      20%,
+      80% {
+        transform: translate3d(4px, 0, 0);
+      }
+
+      30%,
+      50%,
+      70% {
+        transform: translate3d(-6px, 0, 0);
+      }
+
+      40%,
+      60% {
+        transform: translate3d(6px, 0, 0);
+      }
+    }
+
+    /* Hero Attack Recoil */
+    .hero-attack-lunge {
+      animation: heroLunge 0.35s ease-out;
+    }
+
+    @keyframes heroLunge {
+      0% {
+        transform: translateX(0);
+      }
+
+      35% {
+        transform: translateX(25px) scale(1.05);
+        filter: drop-shadow(0 0 20px #00f3ff);
+      }
+
+      100% {
+        transform: translateX(0) scale(1);
+      }
+    }
+
+    /* Hero Hurt */
+    .hero-hurt {
+      animation: heroHurtAnim 0.4s ease-out;
+    }
+
+    @keyframes heroHurtAnim {
+      0% {
+        transform: translateX(0);
+        filter: brightness(2) drop-shadow(0 0 20px #ef4444);
+      }
+
+      25% {
+        transform: translateX(-18px) rotate(-4deg);
+      }
+
+      50% {
+        transform: translateX(12px) rotate(2deg);
+      }
+
+      75% {
+        transform: translateX(-6px);
+      }
+
+      100% {
+        transform: translateX(0);
+        filter: brightness(1);
+      }
+    }
+
+    /* Monster Attack Lunge towards Hero */
+    .monster-attack-lunge {
+      animation: monsterLunge 0.4s ease-out;
+    }
+
+    @keyframes monsterLunge {
+      0% {
+        transform: translateX(0);
+      }
+
+      40% {
+        transform: translateX(-40px) scale(1.15);
+        filter: brightness(1.7) drop-shadow(0 0 25px #ff007f);
+      }
+
+      100% {
+        transform: translateX(0) scale(1);
+      }
+    }
+
+    /* Monster Hurt Wobble & Flash */
+    .monster-hurt {
+      animation: monsterHurtAnim 0.45s ease-out;
+    }
+
+    @keyframes monsterHurtAnim {
+      0% {
+        transform: translateX(0);
+        filter: brightness(3) drop-shadow(0 0 30px #ff007f);
+      }
+
+      20% {
+        transform: translateX(24px) rotate(5deg) scale(0.95);
+      }
+
+      40% {
+        transform: translateX(-18px) rotate(-4deg) scale(1.08);
+      }
+
+      60% {
+        transform: translateX(12px) rotate(2deg) scale(0.98);
+      }
+
+      80% {
+        transform: translateX(-6px);
+      }
+
+      100% {
+        transform: translateX(0);
+        filter: brightness(1);
+      }
+    }
+
+    /* Monster Defeat Explosion */
+    .monster-defeat {
+      animation: monsterDefeatAnim 0.8s forwards cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    @keyframes monsterDefeatAnim {
+      0% {
+        transform: scale(1);
+        opacity: 1;
+        filter: brightness(3);
+      }
+
+      30% {
+        transform: scale(1.25) rotate(10deg);
+        filter: hue-rotate(180deg) brightness(4);
+      }
+
+      70% {
+        transform: scale(0.8) rotate(-15deg);
+        opacity: 0.6;
+        filter: blur(4px);
+      }
+
+      100% {
+        transform: scale(0.1) rotate(45deg);
+        opacity: 0;
+        filter: blur(15px);
+      }
+    }
+
+    /* Monster Spawn In */
+    .monster-spawn {
+      animation: monsterSpawnAnim 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    @keyframes monsterSpawnAnim {
+      0% {
+        transform: scale(0.3) translateY(30px);
+        opacity: 0;
+        filter: blur(10px);
+      }
+
+      100% {
+        transform: scale(1) translateY(0);
+        opacity: 1;
+        filter: blur(0);
+      }
+    }
+
+    /* Speech Bubble Pointer */
+    .speech-bubble::after {
+      content: '';
+      position: absolute;
+      bottom: -6px;
+      right: 24px;
+      border-width: 6px 6px 0;
+      border-style: solid;
+      border-color: #1e293b transparent;
+      display: block;
+      width: 0;
+    }
+
+    /* Scrollbars */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #0f172a;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #334155;
+      border-radius: 3px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: #00f3ff;
+    }
+  </style>
+</head>
+
+<body class="text-slate-100 font-sans min-h-screen flex flex-col justify-between overflow-x-hidden crt-overlay">
+
+  <!-- TOP BAR / HEADER -->
+  <header
+    class="w-full border-b border-cyber-border/80 bg-cyber-surface/90 backdrop-blur-md px-4 py-2.5 z-30 sticky top-0 shadow-lg">
+    <div class="max-w-7xl mx-auto flex items-center justify-between gap-4">
+
+      <!-- Brand & Title -->
+      <div class="flex items-center gap-3">
+        <div
+          class="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyber-neonPurple via-cyber-neonPink to-cyber-neonCyan p-0.5 shadow-lg shadow-cyber-neonCyan/20">
+          <div class="w-full h-full bg-cyber-bg rounded-[10px] flex items-center justify-center text-xl">
+            🐛
+          </div>
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h1
+              class="text-lg md:text-xl font-black tracking-wider bg-clip-text text-transparent bg-gradient-to-r from-cyber-neonCyan via-white to-cyber-neonGreen font-arcade uppercase">
+              ByteWorm
+            </h1>
+            <span
+              class="text-xs px-2 py-0.5 rounded bg-cyber-neonPurple/20 text-cyber-neonPurple border border-cyber-neonPurple/40 font-mono font-bold">
+              MONSTER SLAYER
+            </span>
+          </div>
+          <p class="text-[11px] text-slate-400 font-mono hidden sm:block">
+            Bookworm Adventures × Programming Word Combat RPG
+          </p>
+        </div>
+      </div>
+
+      <!-- Live Stats & Meters -->
+      <div class="flex items-center gap-4 sm:gap-6 font-mono text-sm">
+        <!-- Stage / Level -->
+        <div class="flex flex-col items-center sm:items-start">
+          <span class="text-[10px] text-slate-400 uppercase tracking-wider">Battle Stage</span>
+          <span id="hud-stage" class="font-bold text-cyber-neonCyan text-sm md:text-base">Stage 1-1</span>
+        </div>
+
+        <!-- Score -->
+        <div class="flex flex-col items-center sm:items-start">
+          <span class="text-[10px] text-slate-400 uppercase tracking-wider">Score</span>
+          <span id="hud-score" class="font-bold text-cyber-neonYellow text-sm md:text-base">0</span>
+        </div>
+
+        <!-- Streak -->
+        <div class="flex flex-col items-center sm:items-start">
+          <span class="text-[10px] text-slate-400 uppercase tracking-wider">Streak</span>
+          <div class="flex items-center gap-1">
+            <span id="hud-streak" class="font-bold text-cyber-neonPink text-sm md:text-base">0</span>
+            <span id="streak-flame" class="text-xs opacity-40">🔥</span>
+          </div>
+        </div>
+
+        <!-- Sound & Help Buttons -->
+        <div class="flex items-center gap-2 pl-2 border-l border-slate-700/60">
+          <button id="btn-sound"
+            class="p-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-cyber-neonCyan transition border border-slate-700 text-sm"
+            title="Toggle Sound">
+            🔊
+          </button>
+          <button id="btn-help"
+            class="p-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-cyber-neonGreen transition border border-slate-700 text-sm"
+            title="How to Play & Commands">
+            ❓
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- MAIN BATTLE ARENA (HERO vs CODE TERMINAL vs MONSTER) -->
+  <main class="max-w-7xl mx-auto w-full px-2 sm:px-4 py-3 sm:py-4 flex-1 flex flex-col gap-4 relative z-10">
+
+    <!-- 3-COLUMN COMBAT UPPER DECK -->
+    <section class="grid grid-cols-1 lg:grid-cols-12 gap-3 sm:gap-4 items-stretch">
+
+      <!-- 1. HERO PANEL (Lex the ByteWorm) - lg:col-span-3 -->
+      <div
+        class="lg:col-span-3 bg-cyber-surface/75 border border-cyber-border rounded-2xl p-3.5 sm:p-4 flex flex-col justify-between shadow-xl relative overflow-hidden backdrop-blur-sm">
+
+        <!-- Ambient corner glow -->
+        <div class="absolute -top-12 -left-12 w-32 h-32 bg-cyber-neonCyan/10 rounded-full blur-2xl pointer-events-none">
+        </div>
+
+        <!-- Hero Header -->
+        <div class="flex items-center justify-between mb-1.5">
+          <div class="flex items-center gap-2">
+            <span
+              class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 text-[10px] font-mono font-bold">
+              HERO
+            </span>
+            <span id="hero-title" class="text-xs font-mono font-semibold text-slate-200">Lex The Hacker</span>
+          </div>
+          <span id="hero-level-badge"
+            class="text-[10px] font-mono text-cyber-neonGreen bg-slate-800/80 px-2 py-0.5 rounded border border-slate-700">
+            Lvl 1 • Jr. Coder
+          </span>
+        </div>
+
+        <!-- Hero Graphic & Stage -->
+        <div class="relative py-2 flex flex-col items-center justify-center min-h-[160px]" id="hero-stage">
+
+          <!-- Animated Cyber-Hacker / ByteWorm SVG Graphic -->
+          <div id="hero-avatar" class="relative transition-all duration-300 select-none animate-float">
+
+            <svg class="w-36 h-36 sm:w-40 sm:h-40 drop-shadow-[0_10px_15px_rgba(0,243,255,0.25)]" viewBox="0 0 200 200"
+              fill="none" xmlns="http://www.w3.org/2000/svg">
+              <!-- Cyber Worm / Body segments -->
+              <ellipse cx="100" cy="155" rx="50" ry="18" fill="#0f172a" stroke="#1e293b" stroke-width="3" />
+
+              <!-- Worm Tail segments -->
+              <circle cx="50" cy="145" r="14" fill="#047857" stroke="#05ffa1" stroke-width="2.5" />
+              <circle cx="68" cy="135" r="17" fill="#059669" stroke="#05ffa1" stroke-width="2.5" />
+              <circle cx="92" cy="120" r="22" fill="#10b981" stroke="#34d399" stroke-width="3" />
+
+              <!-- Main Worm Torso -->
+              <ellipse cx="120" cy="105" rx="28" ry="32" fill="#059669" stroke="#05ffa1" stroke-width="3" />
+
+              <!-- Cyber Hoodie / Armor Plating -->
+              <path d="M 95 85 Q 120 70 145 85 Q 155 125 125 130 Q 95 125 95 85 Z" fill="#1e293b" stroke="#38bdf8"
+                stroke-width="2" />
+
+              <!-- Cute Hacker Head -->
+              <circle cx="125" cy="65" r="30" fill="#34d399" stroke="#05ffa1" stroke-width="3.5" />
+
+              <!-- VR Visor / Cyber Goggles with Animated Neon Reflection -->
+              <rect x="110" y="52" width="40" height="18" rx="8" fill="#090d16" stroke="#00f3ff" stroke-width="2.5" />
+              <path d="M 115 58 L 142 58" stroke="#00f3ff" stroke-width="3" stroke-linecap="round"
+                class="animate-pulse" />
+              <circle cx="140" cy="61" r="2" fill="#ff007f" />
+
+              <!-- Antenna with Glowing Gem -->
+              <path d="M 125 35 Q 115 15 105 20" stroke="#05ffa1" stroke-width="3" stroke-linecap="round" />
+              <circle cx="104" cy="20" r="6" fill="#ffe600" stroke="#ff007f" stroke-width="2" class="animate-ping" />
+
+              <!-- Cyberdeck / Laptop -->
+              <rect x="125" y="115" width="42" height="25" rx="3" fill="#1e1b4b" stroke="#b026ff" stroke-width="2"
+                transform="rotate(-15 125 115)" />
+              <rect x="128" y="118" width="36" height="18" rx="2" fill="#000" transform="rotate(-15 125 115)" />
+              <!-- Code lines on laptop screen -->
+              <path d="M 132 122 L 152 117" stroke="#00f3ff" stroke-width="1.5" />
+              <path d="M 134 126 L 148 122" stroke="#05ffa1" stroke-width="1.5" />
+              <path d="M 136 130 L 155 125" stroke="#ffe600" stroke-width="1.5" />
+
+              <!-- Typing Hands / Claws -->
+              <circle cx="122" cy="118" r="6" fill="#34d399" stroke="#05ffa1" stroke-width="2" />
+              <circle cx="145" cy="112" r="6" fill="#34d399" stroke="#05ffa1" stroke-width="2" />
+            </svg>
+
+            <!-- Terminal code floating bubbles -->
+            <div
+              class="absolute -top-1 right-1 text-[10px] font-mono text-cyber-neonCyan bg-black/60 px-2 py-0.5 rounded border border-cyber-neonCyan/40 backdrop-blur pointer-events-none animate-pulse">
+              &gt; attack()
+            </div>
+          </div>
+
+          <!-- Combat Floater Container for Hero -->
+          <div id="hero-floating-fx" class="absolute inset-0 pointer-events-none overflow-hidden"></div>
+        </div>
+
+        <!-- Hero HP Bar & Stats -->
+        <div class="space-y-1.5 pt-2 border-t border-slate-800">
+          <div class="flex justify-between items-center text-xs font-mono">
+            <span class="flex items-center gap-1.5 text-slate-300">
+              <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+              <span>Integrity (HP)</span>
+            </span>
+            <span id="hero-hp-text" class="font-bold text-emerald-400">100 / 100</span>
+          </div>
+
+          <!-- Health Progress Bar -->
+          <div class="w-full h-3 bg-slate-900 rounded-full overflow-hidden p-0.5 border border-slate-700/80">
+            <div id="hero-hp-bar"
+              class="h-full bg-gradient-to-r from-emerald-500 via-teal-400 to-cyber-neonGreen rounded-full transition-all duration-300 shadow-md shadow-emerald-500/30"
+              style="width: 100%;"></div>
+          </div>
+
+          <!-- Consumable / Power-ups Tray -->
+          <div class="pt-1.5 grid grid-cols-4 gap-1 text-center">
+
+            <!-- Espresso (Heal) -->
+            <button id="item-coffee"
+              class="p-1.5 rounded-lg bg-slate-800/80 hover:bg-slate-700 border border-amber-500/30 text-amber-300 transition flex flex-col items-center group relative"
+              title="Espresso: Restores 35 HP">
+              <span class="text-sm">☕</span>
+              <span class="text-[9px] font-mono font-bold">Heal</span>
+              <span id="item-coffee-count"
+                class="absolute -top-1 -right-1 text-[9px] bg-amber-500 text-slate-950 px-1 rounded-full font-bold">2</span>
+            </button>
+
+            <!-- Git Reset (Scramble) -->
+            <button id="item-scramble"
+              class="p-1.5 rounded-lg bg-slate-800/80 hover:bg-slate-700 border border-blue-500/30 text-blue-300 transition flex flex-col items-center group relative"
+              title="Git Reset: Free Letter Scramble (Hotkey: R)">
+              <span class="text-sm">🔄</span>
+              <span class="text-[9px] font-mono font-bold">Reset [R]</span>
+              <span id="item-scramble-count"
+                class="absolute -top-1 -right-1 text-[9px] bg-blue-500 text-slate-950 px-1 rounded-full font-bold">3</span>
+            </button>
+
+            <!-- Debugger (Reveal Top Word) -->
+            <button id="item-debug"
+              class="p-1.5 rounded-lg bg-slate-800/80 hover:bg-slate-700 border border-purple-500/30 text-purple-300 transition flex flex-col items-center group relative"
+              title="Linter: Reveals best tech words on board (Hotkey: D)">
+              <span class="text-sm">🔍</span>
+              <span class="text-[9px] font-mono font-bold">Lint [D]</span>
+              <span id="item-debug-count"
+                class="absolute -top-1 -right-1 text-[9px] bg-purple-500 text-slate-950 px-1 rounded-full font-bold">2</span>
+            </button>
+
+            <!-- Zero-Day (Direct Burst Dmg) -->
+            <button id="item-burst"
+              class="p-1.5 rounded-lg bg-slate-800/80 hover:bg-slate-700 border border-pink-500/30 text-pink-300 transition flex flex-col items-center group relative"
+              title="Zero-Day: Direct 35 damage attack!">
+              <span class="text-sm">⚡</span>
+              <span class="text-[9px] font-mono font-bold">ZeroDay</span>
+              <span id="item-burst-count"
+                class="absolute -top-1 -right-1 text-[9px] bg-pink-500 text-slate-950 px-1 rounded-full font-bold">1</span>
+            </button>
+
+          </div>
+        </div>
+
+      </div>
+
+      <!-- 2. CENTER CODE TERMINAL & QUIZ CHALLENGE - lg:col-span-5 -->
+      <div
+        class="lg:col-span-5 bg-cyber-surface/75 border border-cyber-border rounded-2xl p-3.5 sm:p-4 flex flex-col justify-between shadow-xl relative backdrop-blur-sm overflow-hidden">
+
+        <!-- Ambient central glow -->
+        <div
+          class="absolute -top-10 left-1/2 -translate-x-1/2 w-48 h-32 bg-cyber-neonCyan/5 rounded-full blur-3xl pointer-events-none">
+        </div>
+
+        <div>
+          <!-- Quiz Header -->
+          <div class="flex items-center justify-between gap-2 mb-2 pb-2 border-b border-slate-800">
+            <span id="question-category"
+              class="text-[11px] font-mono px-2 py-0.5 rounded bg-cyan-950/80 text-cyan-300 border border-cyan-800/50 font-bold">
+              [ JavaScript Fundamentals ]
+            </span>
+            <div class="text-[11px] font-mono text-slate-400 flex items-center gap-2">
+              <span id="question-clue-badge" class="text-amber-300 flex items-center gap-1 font-semibold">
+                <span>💡 Clue:</span>
+                <span id="target-word-hint" class="font-bold tracking-wider underline">_ _ _ _ _</span>
+              </span>
+            </div>
+          </div>
+
+          <!-- Question Prompt -->
+          <p id="question-prompt" class="text-xs sm:text-sm font-semibold text-slate-100 mb-2 leading-relaxed">
+            Which keyword declares a block-scoped variable that cannot be reassigned?
+          </p>
+
+          <!-- Interactive Code Sandbox Snippet -->
+          <div
+            class="bg-[#0b0f19] border border-slate-800 rounded-xl p-2.5 sm:p-3 font-mono text-xs sm:text-sm text-cyan-300 overflow-x-auto shadow-inner relative group">
+            <div
+              class="flex items-center justify-between text-[10px] text-slate-500 mb-1 border-b border-slate-800/50 pb-1">
+              <span>code_sandbox.js</span>
+              <span class="text-emerald-400 font-bold flex items-center gap-1">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span>
+                RUNTIME ACTIVE
+              </span>
+            </div>
+            <pre id="question-snippet" class="text-slate-300 font-mono whitespace-pre-wrap"><code class="text-slate-300">_____ PI = 3.14159;
+PI = 4; // TypeError: Assignment to constant</code></pre>
+          </div>
+        </div>
+
+        <!-- Clue / Multiplier Legend Box -->
+        <div
+          class="mt-2.5 flex flex-wrap items-center justify-between gap-2 text-[11px] font-mono bg-slate-950/70 px-3 py-2 rounded-xl border border-slate-800">
+          <div class="flex items-center gap-1.5 text-slate-300">
+            <span class="text-amber-400">⭐ Hint:</span>
+            <span id="question-clue-text" class="text-slate-300">5 letters • Immutable variable keyword</span>
+          </div>
+          <div class="text-cyber-neonGreen font-semibold">
+            <span>Solution = <b class="text-amber-300">5x CRIT HIT!</b></span>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- 3. MONSTER / ENEMY VISUAL BOX (RIGHT) - lg:col-span-4 -->
+      <div id="monster-panel"
+        class="lg:col-span-4 bg-cyber-surface/75 border border-pink-900/40 rounded-2xl p-3.5 sm:p-4 flex flex-col justify-between shadow-xl relative backdrop-blur-sm overflow-hidden">
+
+        <!-- Ambient monster red/purple glow -->
+        <div id="monster-glow"
+          class="absolute -top-12 -right-12 w-40 h-40 bg-pink-500/10 rounded-full blur-3xl pointer-events-none transition-colors duration-500">
+        </div>
+
+        <!-- Monster Header & Attack Timer -->
+        <div>
+          <div class="flex items-center justify-between gap-2 mb-1.5">
+            <div class="flex items-center gap-2">
+              <span id="monster-badge"
+                class="px-2 py-0.5 rounded bg-pink-500/20 text-pink-400 border border-pink-500/30 text-[10px] font-mono font-bold">
+                ENEMY MONSTER
+              </span>
+              <span id="monster-title" class="text-[11px] font-mono text-slate-400">
+                Tier 1 • Arachnid Bug
+              </span>
+            </div>
+
+            <!-- Monster Glitch Attack Turn Timer -->
+            <div
+              class="flex items-center gap-1.5 bg-slate-900/90 px-2 py-0.5 rounded-lg border border-slate-800 text-[11px] font-mono">
+              <span class="text-slate-400 text-[10px]">Attack in:</span>
+              <span id="boss-turn-timer" class="font-bold text-cyber-neonYellow">3 moves</span>
+              <div id="boss-turn-pips" class="flex items-center gap-1">
+                <span class="w-1.5 h-1.5 rounded-full bg-cyber-neonYellow"></span>
+                <span class="w-1.5 h-1.5 rounded-full bg-cyber-neonYellow"></span>
+                <span class="w-1.5 h-1.5 rounded-full bg-cyber-neonYellow"></span>
+              </div>
+            </div>
+          </div>
+
+          <h2 id="boss-name" class="font-mono font-bold text-base sm:text-lg text-pink-300 tracking-wide">
+            Syntax Bug Spider
+          </h2>
+        </div>
+
+        <!-- Animated Monster Stage & Speech Bubble -->
+        <div class="relative py-1 flex flex-col items-center justify-center min-h-[170px]" id="monster-stage">
+
+          <!-- Monster Dialogue / Taunt Bubble -->
+          <div id="monster-quip"
+            class="speech-bubble absolute -top-1 right-2 max-w-[210px] bg-slate-900/90 border border-slate-700/80 rounded-xl px-2.5 py-1 text-[11px] font-mono text-slate-300 shadow-lg pointer-events-none z-20 transition-all">
+            "Unclosed brackets detected! Spinning runtime traps!"
+          </div>
+
+          <!-- Dynamic Animated Monster Avatar (Rendered via SVG by JS) -->
+          <div id="monster-avatar" class="relative transition-all duration-300 select-none cursor-pointer">
+            <!-- Dynamically populated by JS renderMonsterSvg() -->
+          </div>
+
+          <!-- Floating Combat FX Container for Monster -->
+          <div id="boss-floating-fx" class="absolute inset-0 pointer-events-none overflow-visible"></div>
+        </div>
+
+        <!-- Monster Health Bar & Integrity -->
+        <div class="space-y-1.5 pt-2 border-t border-slate-800">
+          <div class="flex justify-between items-center text-xs font-mono">
+            <span class="text-slate-400 flex items-center gap-1.5">
+              <span id="monster-hp-dot" class="w-2 h-2 rounded-full bg-pink-500 animate-ping"></span>
+              <span>Monster HP</span>
+            </span>
+            <span id="boss-hp-text" class="font-bold text-cyber-neonPink">80 / 80 PTS</span>
+          </div>
+
+          <!-- Health Progress Bar -->
+          <div class="w-full h-3.5 bg-slate-900 rounded-full overflow-hidden p-0.5 border border-pink-900/50">
+            <div id="boss-hp-bar"
+              class="h-full bg-gradient-to-r from-pink-500 via-rose-500 to-amber-500 rounded-full transition-all duration-300 shadow-md shadow-pink-500/30"
+              style="width: 100%;"></div>
+          </div>
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- WORD TRAY & LETTER FORMATION SECTION -->
+    <section
+      class="bg-cyber-surface/80 border border-cyber-border rounded-2xl p-3 sm:p-4 shadow-2xl flex flex-col gap-3 relative">
+
+      <!-- CURRENT WORD BAR -->
+      <div
+        class="bg-slate-950/90 border-2 border-cyan-500/30 rounded-xl p-2.5 sm:p-3 flex flex-col sm:flex-row items-center justify-between gap-3 shadow-inner relative">
+
+        <!-- Active Word Display Slots -->
+        <div
+          class="flex items-center gap-1.5 sm:gap-2 min-h-[52px] sm:min-h-[58px] overflow-x-auto max-w-full px-2 py-1"
+          id="current-word-slots">
+          <!-- Populated dynamically with active letters -->
+          <div class="text-slate-500 font-mono text-xs sm:text-sm italic select-none py-2 px-3">
+            Click letters below or type on your keyboard to construct a programming word...
+          </div>
+        </div>
+
+        <!-- Word Validation Preview & Action Buttons -->
+        <div class="flex items-center gap-2 w-full sm:w-auto justify-end flex-shrink-0">
+
+          <!-- Live Word Evaluation Pill -->
+          <div id="word-eval-pill"
+            class="hidden sm:flex items-center gap-1.5 px-3 py-1 rounded-lg bg-slate-900 border border-slate-700 text-xs font-mono">
+            <span id="word-eval-type" class="text-slate-400">Length: 0</span>
+            <span id="word-eval-pts" class="text-cyber-neonYellow font-bold">0 pts</span>
+          </div>
+
+          <!-- Clear / Backspace Buttons -->
+          <button id="btn-backspace"
+            class="px-3 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl font-mono text-xs border border-slate-700 transition flex items-center gap-1"
+            title="Backspace (Undo last letter)">
+            <span>⌫</span>
+            <span class="hidden sm:inline">Back</span>
+          </button>
+
+          <button id="btn-clear"
+            class="px-3 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl font-mono text-xs border border-slate-700 transition"
+            title="Clear selection (Hotkey: Esc)">
+            Clear
+          </button>
+
+          <!-- SUBMIT / COMPILE BUTTON -->
+          <button id="btn-submit"
+            class="px-5 py-2.5 bg-gradient-to-r from-cyber-neonCyan via-teal-400 to-cyber-neonGreen hover:from-cyan-300 hover:to-emerald-300 text-slate-950 font-mono font-bold rounded-xl text-xs sm:text-sm transition-all transform hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-cyber-neonCyan/25 flex items-center gap-2"
+            title="Compile & Attack Monster! (Hotkey: Enter)">
+            <span>⚡ COMPILE & ATTACK</span>
+            <span class="text-[10px] bg-slate-950/20 px-1.5 py-0.5 rounded font-mono font-semibold">[Enter]</span>
+          </button>
+
+        </div>
+
+      </div>
+
+      <!-- LETTER GRID TRAY (16 ARCADE TILES) -->
+      <div>
+        <div class="flex items-center justify-between text-xs font-mono text-slate-400 mb-1.5 px-1">
+          <span class="flex items-center gap-1.5">
+            <span class="text-cyber-neonCyan font-bold">🔤 Letter Grid</span>
+            <span class="text-slate-500 hidden sm:inline">(Type directly or click)</span>
+          </span>
+          <div class="flex items-center gap-3 text-[11px]">
+            <span class="text-cyan-400">💎 Diamond = 3x</span>
+            <span class="text-pink-400">🔴 Ruby = Burn</span>
+            <span class="text-indigo-400">🔷 Sapphire = Freeze</span>
+            <span class="text-emerald-400">🟢 Emerald = Heal</span>
+          </div>
+        </div>
+
+        <!-- 16 Letter Buttons Grid: 8x2 on desktop, 4x4 on mobile -->
+        <div id="letter-grid"
+          class="grid grid-cols-4 sm:grid-cols-8 gap-2 sm:gap-2.5 p-2 bg-slate-950/70 border border-slate-800 rounded-xl">
+          <!-- 16 Tiles generated dynamically by JavaScript -->
+        </div>
+      </div>
+
+    </section>
+
+    <!-- KEYBOARD & TIPS HUD -->
+    <footer class="flex flex-wrap items-center justify-between gap-2 text-[11px] font-mono text-slate-400 px-2 py-1">
+      <div class="flex flex-wrap items-center gap-3">
+        <span>⌨️ <b class="text-slate-300">Keyboard:</b> Type letters • [Backspace] Undo • [Enter] Attack • [Esc]
+          Clear</span>
+        <span>• [R] Scramble • [D] Linter Hint</span>
+      </div>
+      <div class="flex items-center gap-2 text-cyber-neonCyan">
+        <span>💡 Tech words = <b class="text-emerald-300">2.5x DMG</b>; Trivia solution = <b class="text-yellow-300">5x
+            CRIT!</b></span>
+      </div>
+    </footer>
+
+  </main>
+
+  <!-- CANVAS FOR LASERS, EXPLOSIONS, & COMBAT FX -->
+  <canvas id="fx-canvas" class="fixed inset-0 pointer-events-none z-50"></canvas>
+
+  <!-- HOW TO PLAY / MODAL DIALOG -->
+  <div id="modal-help"
+    class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div
+      class="bg-cyber-surface border-2 border-cyber-border rounded-2xl max-w-xl w-full p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
+
+      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+        <div class="flex items-center gap-2">
+          <span class="text-2xl">🎮</span>
+          <h3 class="text-lg font-bold font-arcade text-cyber-neonCyan">HOW TO PLAY</h3>
+        </div>
+        <button id="btn-close-help" class="text-slate-400 hover:text-white text-xl p-1 font-mono">✕</button>
+      </div>
+
+      <div class="space-y-3 text-sm text-slate-300 leading-relaxed font-sans">
+        <div class="bg-slate-900/80 p-3 rounded-xl border border-slate-800">
+          <h4 class="font-bold text-cyber-neonGreen font-mono text-xs uppercase mb-1">1. The Mission</h4>
+          <p>You are <strong class="text-white">Lex the ByteWorm</strong>! Software monsters are corrupting the
+            codebase. Each monster guards a programming quiz question and attacks if not defeated in time.</p>
+        </div>
+
+        <div class="bg-slate-900/80 p-3 rounded-xl border border-slate-800">
+          <h4 class="font-bold text-cyber-neonCyan font-mono text-xs uppercase mb-1">2. Monster Combat & Word
+            Multipliers</h4>
+          <p>Form words from the 16 letter tiles using either mouse clicks or keyboard typing.</p>
+          <ul class="list-disc list-inside mt-1 space-y-0.5 text-xs text-slate-400">
+            <li><strong class="text-amber-300">Trivia Solution:</strong> Spells the exact answer to the question for
+              <strong class="text-amber-400">5x CRITICAL DAMAGE</strong>!
+            </li>
+            <li><strong class="text-emerald-300">Programming Keywords:</strong> Words like <code
+                class="text-cyan-300">VAR, INT, FOR, ARRAY, OBJECT, PROMISE, NULL, PUSH, POP</code> deal <strong
+                class="text-emerald-400">2.5x TECH COMBO</strong>!</li>
+            <li><strong class="text-slate-300">Standard English Words:</strong> Valid English words deal normal 1x
+              damage so you never get stuck!</li>
+          </ul>
+        </div>
+
+        <div class="bg-slate-900/80 p-3 rounded-xl border border-slate-800">
+          <h4 class="font-bold text-pink-400 font-mono text-xs uppercase mb-1">3. Themed Monsters</h4>
+          <p>Battle through distinctive software beasts: <strong>Syntax Bug Spider</strong>, <strong>Memory Leak
+              Slime</strong>, <strong>Null Pointer Phantom</strong>, <strong>Infinite Loop Dragon</strong>, and the
+            <strong>Deadlock Kraken</strong>!
+          </p>
+        </div>
+      </div>
+
+      <div class="pt-2 text-center">
+        <button id="btn-close-help-2"
+          class="px-6 py-2 bg-cyber-neonCyan text-slate-950 font-bold rounded-xl hover:bg-cyan-300 transition font-mono">
+          Ready to Battle!
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- VICTORY / STAGE CLEAR MODAL -->
+  <div id="modal-victory"
+    class="fixed inset-0 bg-black/85 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+    <div
+      class="bg-cyber-surface border-2 border-emerald-500/50 rounded-2xl max-w-md w-full p-6 shadow-2xl text-center space-y-4 animate-popIn">
+      <div class="text-5xl animate-bounce">🏆</div>
+      <div>
+        <h3 class="text-xl font-black font-arcade text-cyber-neonGreen uppercase">
+          BUG FIXED & MONSTER SLAIN!
+        </h3>
+        <p id="victory-subtitle" class="text-xs font-mono text-slate-400 mt-1">
+          Code compiled cleanly! Monster disintegrated.
+        </p>
+      </div>
+
+      <div class="bg-slate-950/80 p-4 rounded-xl border border-slate-800 font-mono text-sm space-y-2 text-left">
+        <div class="flex justify-between">
+          <span class="text-slate-400">Defeated Monster:</span>
+          <span id="victory-monster" class="text-pink-400 font-bold">Syntax Bug Spider</span>
+        </div>
+        <div class="flex justify-between">
+          <span class="text-slate-400">Question Answered:</span>
+          <span id="victory-answer" class="text-cyber-neonYellow font-bold">CONST</span>
+        </div>
+        <div class="flex justify-between">
+          <span class="text-slate-400">Damage Dealt:</span>
+          <span id="victory-dmg" class="text-cyan-400 font-bold">+120 DMG</span>
+        </div>
+        <div class="flex justify-between">
+          <span class="text-slate-400">Total Score:</span>
+          <span id="victory-score" class="text-cyber-neonCyan font-bold">1,450</span>
+        </div>
+        <div class="flex justify-between">
+          <span class="text-slate-400">Current Streak:</span>
+          <span id="victory-streak" class="text-emerald-400 font-bold">🔥 3 Stages</span>
+        </div>
+      </div>
+
+      <button id="btn-next-stage"
+        class="w-full py-3 bg-gradient-to-r from-emerald-500 to-cyber-neonCyan hover:from-emerald-400 hover:to-cyan-300 text-slate-950 font-bold font-mono rounded-xl shadow-lg shadow-emerald-500/25 transition">
+        ADVANCE TO NEXT MONSTER →
+      </button>
+    </div>
+  </div>
+
+  <!-- GAME OVER / RESTART MODAL -->
+  <div id="modal-gameover"
+    class="fixed inset-0 bg-black/90 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+    <div
+      class="bg-cyber-surface border-2 border-rose-500/50 rounded-2xl max-w-md w-full p-6 shadow-2xl text-center space-y-4">
+      <div class="text-5xl">💥</div>
+      <div>
+        <h3 class="text-xl font-black font-arcade text-rose-500 uppercase">
+          FATAL CRASH!
+        </h3>
+        <p class="text-xs font-mono text-slate-400 mt-1">
+          Kernel Panic: The monster's glitch attack depleted your system integrity.
+        </p>
+      </div>
+
+      <div class="bg-slate-950/80 p-4 rounded-xl border border-slate-800 font-mono text-sm space-y-2 text-left">
+        <div class="flex justify-between">
+          <span class="text-slate-400">Final Score:</span>
+          <span id="gameover-score" class="text-cyber-neonYellow font-bold">0</span>
+        </div>
+        <div class="flex justify-between">
+          <span class="text-slate-400">Monsters Defeated:</span>
+          <span id="gameover-stages" class="text-cyan-400 font-bold">0</span>
+        </div>
+      </div>
+
+      <button id="btn-restart"
+        class="w-full py-3 bg-gradient-to-r from-rose-500 to-amber-500 hover:from-rose-400 hover:to-amber-400 text-slate-950 font-bold font-mono rounded-xl shadow-lg transition">
+        REBOOT SYSTEM & RETRY ⚡
+      </button>
+    </div>
+  </div>
+
+  <!-- JAVASCRIPT GAME LOGIC & MONSTER ENGINE -->
+  <script>
+    /* =========================================================================
+       BYTEWORM ADVENTURES - JAVASCRIPT GAME ENGINE WITH ANIMATED MONSTERS
+       ========================================================================= */
+
+    // 1. SOUND SYNTHESIS ENGINE (Web Audio API)
+    class SoundEngine {
+      constructor() {
+        this.ctx = null;
+        this.muted = false;
+      }
+
+      init() {
+        if (!this.ctx) {
+          const AudioContext = window.AudioContext || window.webkitAudioContext;
+          if (AudioContext) {
+            this.ctx = new AudioContext();
+          }
+        }
+        if (this.ctx && this.ctx.state === 'suspended') {
+          this.ctx.resume();
+        }
+      }
+
+      toggleMute() {
+        this.muted = !this.muted;
+        return this.muted;
+      }
+
+      // Musical note on letter click that scales upward with word length!
+      playTilePluck(letterIndex = 0) {
+        if (this.muted) return;
+        this.init();
+        if (!this.ctx) return;
+
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = 'triangle';
+
+        const pentatonic = [261.63, 293.66, 329.63, 392.00, 440.00, 523.25, 587.33, 659.25, 783.99, 880.00];
+        const freq = pentatonic[letterIndex % pentatonic.length] || 440;
+
+        osc.frequency.setValueAtTime(freq, this.ctx.currentTime);
+        gain.gain.setValueAtTime(0.12, this.ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + 0.18);
+
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start();
+        osc.stop(this.ctx.currentTime + 0.2);
+      }
+
+      playTileRemove() {
+        if (this.muted) return;
+        this.init();
+        if (!this.ctx) return;
+
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(220, this.ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(140, this.ctx.currentTime + 0.12);
+        gain.gain.setValueAtTime(0.1, this.ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + 0.12);
+
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start();
+        osc.stop(this.ctx.currentTime + 0.14);
+      }
+
+      playInvalidBuzz() {
+        if (this.muted) return;
+        this.init();
+        if (!this.ctx) return;
+
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(110, this.ctx.currentTime);
+        osc.frequency.setValueAtTime(90, this.ctx.currentTime + 0.1);
+        gain.gain.setValueAtTime(0.15, this.ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.25);
+
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start();
+        osc.stop(this.ctx.currentTime + 0.28);
+      }
+
+      playAttackBeam(isCritical = false) {
+        if (this.muted) return;
+        this.init();
+        if (!this.ctx) return;
+
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = isCritical ? 'square' : 'sawtooth';
+        osc.frequency.setValueAtTime(isCritical ? 880 : 540, this.ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(80, this.ctx.currentTime + 0.35);
+
+        gain.gain.setValueAtTime(0.2, this.ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.4);
+
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start();
+        osc.stop(this.ctx.currentTime + 0.42);
+
+        if (isCritical) {
+          const subOsc = this.ctx.createOscillator();
+          const subGain = this.ctx.createGain();
+          subOsc.type = 'triangle';
+          subOsc.frequency.setValueAtTime(140, this.ctx.currentTime + 0.1);
+          subOsc.frequency.exponentialRampToValueAtTime(30, this.ctx.currentTime + 0.5);
+          subGain.gain.setValueAtTime(0.3, this.ctx.currentTime + 0.1);
+          subGain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.6);
+          subOsc.connect(subGain);
+          subGain.connect(this.ctx.destination);
+          subOsc.start(this.ctx.currentTime + 0.1);
+          subOsc.stop(this.ctx.currentTime + 0.65);
+        }
+      }
+
+      playMonsterHurt() {
+        if (this.muted) return;
+        this.init();
+        if (!this.ctx) return;
+
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(220, this.ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(50, this.ctx.currentTime + 0.28);
+        gain.gain.setValueAtTime(0.22, this.ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.3);
+
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start();
+        osc.stop(this.ctx.currentTime + 0.32);
+      }
+
+      playMonsterAttack() {
+        if (this.muted) return;
+        this.init();
+        if (!this.ctx) return;
+
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(340, this.ctx.currentTime);
+        osc.frequency.setValueAtTime(160, this.ctx.currentTime + 0.15);
+        gain.gain.setValueAtTime(0.22, this.ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.4);
+
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start();
+        osc.stop(this.ctx.currentTime + 0.42);
+      }
+
+      playVictoryFanfare() {
+        if (this.muted) return;
+        this.init();
+        if (!this.ctx) return;
+
+        const notes = [523.25, 659.25, 783.99, 1046.50]; // C5, E5, G5, C6
+        notes.forEach((freq, idx) => {
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(freq, this.ctx.currentTime + idx * 0.12);
+          gain.gain.setValueAtTime(0.18, this.ctx.currentTime + idx * 0.12);
+          gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + idx * 0.12 + 0.35);
+
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+          osc.start(this.ctx.currentTime + idx * 0.12);
+          osc.stop(this.ctx.currentTime + idx * 0.12 + 0.4);
+        });
+      }
+
+      playItemUse() {
+        if (this.muted) return;
+        this.init();
+        if (!this.ctx) return;
+
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(440, this.ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(880, this.ctx.currentTime + 0.2);
+        gain.gain.setValueAtTime(0.15, this.ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.25);
+
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start();
+        osc.stop(this.ctx.currentTime + 0.27);
+      }
+    }
+
+    const sound = new SoundEngine();
+
+    // 2. CANVAS PARTICLE & LASER FX ENGINE
+    class FXEngine {
+      constructor(canvasId) {
+        this.canvas = document.getElementById(canvasId);
+        this.ctx = this.canvas.getContext('2d');
+        this.particles = [];
+        this.lasers = [];
+        this.resize();
+        window.addEventListener('resize', () => this.resize());
+        this.animate = this.animate.bind(this);
+        requestAnimationFrame(this.animate);
+      }
+
+      resize() {
+        this.canvas.width = window.innerWidth;
+        this.canvas.height = window.innerHeight;
+      }
+
+      spawnParticles(x, y, count = 20, colors = ['#00f3ff', '#05ffa1', '#ffe600', '#ff007f']) {
+        for (let i = 0; i < count; i++) {
+          const angle = Math.random() * Math.PI * 2;
+          const speed = Math.random() * 6 + 2;
+          this.particles.push({
+            x, y,
+            vx: Math.cos(angle) * speed,
+            vy: Math.sin(angle) * speed,
+            size: Math.random() * 4 + 2,
+            color: colors[Math.floor(Math.random() * colors.length)],
+            alpha: 1,
+            life: Math.random() * 20 + 25
+          });
+        }
+      }
+
+      spawnConfetti() {
+        const colors = ['#00f3ff', '#ff007f', '#05ffa1', '#ffe600', '#b026ff', '#38bdf8'];
+        for (let i = 0; i < 90; i++) {
+          this.particles.push({
+            x: Math.random() * this.canvas.width,
+            y: -10,
+            vx: (Math.random() - 0.5) * 5,
+            vy: Math.random() * 4 + 3,
+            size: Math.random() * 7 + 4,
+            color: colors[Math.floor(Math.random() * colors.length)],
+            alpha: 1,
+            life: 100
+          });
+        }
+      }
+
+      shootLaser(startX, startY, endX, endY, color = '#00f3ff', isCrit = false) {
+        this.lasers.push({
+          startX, startY, endX, endY,
+          color,
+          isCrit,
+          progress: 0,
+          maxProgress: 14
+        });
+      }
+
+      animate() {
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
+        // Render lasers
+        for (let i = this.lasers.length - 1; i >= 0; i--) {
+          const l = this.lasers[i];
+          l.progress++;
+
+          const alpha = 1 - (l.progress / l.maxProgress);
+          this.ctx.save();
+          this.ctx.strokeStyle = l.color;
+          this.ctx.lineWidth = l.isCrit ? 8 : 4;
+          this.ctx.shadowBlur = l.isCrit ? 25 : 12;
+          this.ctx.shadowColor = l.color;
+          this.ctx.globalAlpha = alpha;
+
+          this.ctx.beginPath();
+          this.ctx.moveTo(l.startX, l.startY);
+          this.ctx.lineTo(l.endX, l.endY);
+          this.ctx.stroke();
+
+          // Core bright beam
+          this.ctx.strokeStyle = '#ffffff';
+          this.ctx.lineWidth = l.isCrit ? 3 : 1.5;
+          this.ctx.stroke();
+
+          this.ctx.restore();
+
+          if (l.progress >= l.maxProgress) {
+            this.spawnParticles(l.endX, l.endY, l.isCrit ? 35 : 18, [l.color, '#ffffff']);
+            this.lasers.splice(i, 1);
+          }
+        }
+
+        // Render particles
+        for (let i = this.particles.length - 1; i >= 0; i--) {
+          const p = this.particles[i];
+          p.x += p.vx;
+          p.y += p.vy;
+          p.vy += 0.12;
+          p.life--;
+          p.alpha = Math.max(0, p.life / 30);
+
+          this.ctx.save();
+          this.ctx.fillStyle = p.color;
+          this.ctx.globalAlpha = p.alpha;
+          this.ctx.beginPath();
+          this.ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+          this.ctx.fill();
+          this.ctx.restore();
+
+          if (p.life <= 0 || p.y > this.canvas.height + 20) {
+            this.particles.splice(i, 1);
+          }
+        }
+
+        requestAnimationFrame(this.animate);
+      }
+    }
+
+    const fx = new FXEngine('fx-canvas');
+
+    // 3. MONSTER DEFINITIONS & DETAILED SVG GENERATOR
+    const MONSTERS = {
+      spider: {
+        id: 'spider',
+        name: 'Syntax Bug Spider',
+        title: 'Tier 1 • Arachnid Bug',
+        color: '#ff007f',
+        glowClass: 'bg-pink-500/15',
+        borderClass: 'border-pink-900/50',
+        animClass: 'animate-spiderTwitch',
+        quip: '"Unclosed brackets detected! Spinning runtime traps!"',
+        svg: `
+          <svg class="w-36 h-36 sm:w-40 sm:h-40 drop-shadow-[0_8px_16px_rgba(255,0,127,0.35)]" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- Spider Web Background -->
+            <path d="M 100 20 L 100 180 M 20 100 L 180 100 M 40 40 L 160 160 M 160 40 L 40 160" stroke="#ff007f" stroke-width="1" opacity="0.25"/>
+            <!-- 8 Twitching Robotic Legs -->
+            <path d="M 80 90 Q 40 60 25 90 Q 15 110 10 135" stroke="#ec4899" stroke-width="3.5" stroke-linecap="round"/>
+            <path d="M 80 100 Q 35 90 20 120 Q 12 140 8 160" stroke="#ec4899" stroke-width="3.5" stroke-linecap="round"/>
+            <path d="M 80 110 Q 40 120 25 150 Q 20 170 18 185" stroke="#ec4899" stroke-width="3.5" stroke-linecap="round"/>
+            <path d="M 80 80 Q 45 40 30 50 Q 20 65 15 85" stroke="#ec4899" stroke-width="3.5" stroke-linecap="round"/>
+            
+            <path d="M 120 90 Q 160 60 175 90 Q 185 110 190 135" stroke="#ec4899" stroke-width="3.5" stroke-linecap="round"/>
+            <path d="M 120 100 Q 165 90 180 120 Q 188 140 192 160" stroke="#ec4899" stroke-width="3.5" stroke-linecap="round"/>
+            <path d="M 120 110 Q 160 120 175 150 Q 180 170 182 185" stroke="#ec4899" stroke-width="3.5" stroke-linecap="round"/>
+            <path d="M 120 80 Q 155 40 170 50 Q 180 65 185 85" stroke="#ec4899" stroke-width="3.5" stroke-linecap="round"/>
+            
+            <!-- Spider Abdomen with Inscribed Syntax Brackets -->
+            <ellipse cx="100" cy="130" rx="36" ry="42" fill="#18181b" stroke="#ff007f" stroke-width="3.5"/>
+            <text x="100" y="138" font-family="'Fira Code', monospace" font-size="24" font-weight="bold" fill="#ff007f" text-anchor="middle">{ ; }</text>
+            
+            <!-- Spider Head / Cephalothorax -->
+            <ellipse cx="100" cy="85" rx="26" ry="22" fill="#27272a" stroke="#ff007f" stroke-width="3"/>
+            
+            <!-- Cluster of 6 Glowing Optics/Eyes -->
+            <circle cx="90" cy="80" r="4.5" fill="#ffe600" stroke="#ff007f" stroke-width="1.5" class="animate-pulse"/>
+            <circle cx="110" cy="80" r="4.5" fill="#ffe600" stroke="#ff007f" stroke-width="1.5" class="animate-pulse"/>
+            <circle cx="95" cy="73" r="3" fill="#ff007f"/>
+            <circle cx="105" cy="73" r="3" fill="#ff007f"/>
+            <circle cx="85" cy="88" r="2.5" fill="#ff007f"/>
+            <circle cx="115" cy="88" r="2.5" fill="#ff007f"/>
+            
+            <!-- Mandibles / Fangs -->
+            <path d="M 94 98 Q 90 115 84 112" stroke="#ffe600" stroke-width="3" stroke-linecap="round"/>
+            <path d="M 106 98 Q 110 115 116 112" stroke="#ffe600" stroke-width="3" stroke-linecap="round"/>
+          </svg>
+        `
+      },
+      slime: {
+        id: 'slime',
+        name: 'Memory Leak Slime',
+        title: 'Tier 1 • Toxic Heap Ooze',
+        color: '#05ffa1',
+        glowClass: 'bg-emerald-500/15',
+        borderClass: 'border-emerald-900/50',
+        animClass: 'animate-slimeWobble',
+        quip: '"Gloop... consuming all 16GB of your RAM until freeze!"',
+        svg: `
+          <svg class="w-36 h-36 sm:w-40 sm:h-40 drop-shadow-[0_8px_16px_rgba(5,255,161,0.35)]" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- Puddle / Slime base -->
+            <ellipse cx="100" cy="165" rx="60" ry="16" fill="#064e3b" stroke="#05ffa1" stroke-width="2.5" opacity="0.6"/>
+            <!-- Main Gelatinous Body -->
+            <path d="M 45 155 Q 30 110 55 75 Q 80 40 120 45 Q 165 50 165 95 Q 170 145 155 155 Q 125 175 45 155 Z" fill="#047857" stroke="#05ffa1" stroke-width="3.5"/>
+            <!-- Translucent Inner Core -->
+            <path d="M 55 145 Q 45 105 70 80 Q 95 55 125 60 Q 150 70 150 105 Q 155 140 140 148 Q 110 160 55 145 Z" fill="#10b981" opacity="0.75"/>
+            
+            <!-- Swallowed Leaked Memory Byte Badges -->
+            <rect x="70" y="115" width="34" height="16" rx="4" fill="#0f172a" stroke="#ffe600" stroke-width="1.5"/>
+            <text x="87" y="127" font-family="'Fira Code', monospace" font-size="9" font-weight="bold" fill="#ffe600" text-anchor="middle">0x7F</text>
+            
+            <rect x="110" y="128" width="36" height="16" rx="4" fill="#0f172a" stroke="#00f3ff" stroke-width="1.5"/>
+            <text x="128" y="140" font-family="'Fira Code', monospace" font-size="9" font-weight="bold" fill="#00f3ff" text-anchor="middle">RAM</text>
+            
+            <!-- Cute/Menacing Glowing Slime Eyes -->
+            <circle cx="80" cy="85" r="14" fill="#022c22" stroke="#05ffa1" stroke-width="2"/>
+            <circle cx="82" cy="84" r="6" fill="#ffe600"/>
+            <circle cx="85" cy="82" r="2" fill="#ffffff"/>
+            
+            <circle cx="125" cy="88" r="12" fill="#022c22" stroke="#05ffa1" stroke-width="2"/>
+            <circle cx="123" cy="87" r="5" fill="#ffe600"/>
+            <circle cx="125" cy="85" r="2" fill="#ffffff"/>
+            
+            <!-- Dripping Slime Bubble -->
+            <circle cx="140" cy="50" r="5" fill="#05ffa1" class="animate-ping"/>
+            <circle cx="45" cy="95" r="4" fill="#05ffa1" opacity="0.8"/>
+            <circle cx="160" cy="120" r="6" fill="#05ffa1" opacity="0.8"/>
+          </svg>
+        `
+      },
+      phantom: {
+        id: 'phantom',
+        name: 'Null Pointer Phantom',
+        title: 'Tier 2 • Void Spectre',
+        color: '#00f3ff',
+        glowClass: 'bg-cyan-500/15',
+        borderClass: 'border-cyan-900/50',
+        animClass: 'animate-phantomDrift',
+        quip: '"Cannot read properties of null! Fade into undefined!"',
+        svg: `
+          <svg class="w-36 h-36 sm:w-40 sm:h-40 drop-shadow-[0_8px_16px_rgba(0,243,255,0.35)]" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- Spectral Shadow Aura -->
+            <ellipse cx="100" cy="175" rx="45" ry="10" fill="#082f49" opacity="0.4"/>
+            <!-- Wavy Ghost Body / Robes -->
+            <path d="M 60 70 Q 100 20 140 70 Q 155 120 145 160 Q 135 145 125 160 Q 110 140 100 160 Q 90 145 75 160 Q 55 125 60 70 Z" fill="#0f172a" stroke="#00f3ff" stroke-width="3"/>
+            <!-- Ghost Inner Void -->
+            <path d="M 70 80 Q 100 38 130 80 Q 140 115 130 145 Q 115 135 100 145 Q 85 135 70 145 Q 65 115 70 80 Z" fill="#164e63" opacity="0.6"/>
+            
+            <!-- Glowing Void Skull Visor -->
+            <circle cx="100" cy="75" r="24" fill="#020617" stroke="#00f3ff" stroke-width="2.5"/>
+            <!-- Floating Glowing Cyber Eye Sockets -->
+            <rect x="86" y="68" width="9" height="14" rx="4" fill="#00f3ff" class="animate-pulse"/>
+            <rect x="105" y="68" width="9" height="14" rx="4" fill="#00f3ff" class="animate-pulse"/>
+            
+            <!-- Null Word floating inside chest -->
+            <text x="100" y="125" font-family="'Fira Code', monospace" font-size="13" font-weight="bold" fill="#00f3ff" text-anchor="middle" letter-spacing="2">NULL</text>
+            
+            <!-- Floating Cyber Whisp Hands -->
+            <circle cx="45" cy="100" r="9" fill="#082f49" stroke="#00f3ff" stroke-width="2"/>
+            <circle cx="155" cy="98" r="9" fill="#082f49" stroke="#00f3ff" stroke-width="2"/>
+          </svg>
+        `
+      },
+      dragon: {
+        id: 'dragon',
+        name: 'Infinite Loop Dragon',
+        title: 'Tier 3 • Loop Ouroboros',
+        color: '#ffe600',
+        glowClass: 'bg-amber-500/15',
+        borderClass: 'border-amber-900/50',
+        animClass: 'animate-dragonHover',
+        quip: '"while(true) burns forever! Your CPU fan screams!"',
+        svg: `
+          <svg class="w-36 h-36 sm:w-40 sm:h-40 drop-shadow-[0_8px_16px_rgba(255,230,0,0.35)]" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- Ouroboros Ring of Code behind Dragon -->
+            <circle cx="100" cy="100" r="62" stroke="#ffe600" stroke-width="3" stroke-dasharray="10 6" opacity="0.4" class="animate-spin" style="transform-origin: center;"/>
+            
+            <!-- Mechanical Wings -->
+            <path d="M 80 80 Q 30 30 15 65 Q 40 85 70 95 Z" fill="#78350f" stroke="#ffe600" stroke-width="2"/>
+            <path d="M 120 80 Q 170 30 185 65 Q 160 85 130 95 Z" fill="#78350f" stroke="#ffe600" stroke-width="2"/>
+            
+            <!-- Dragon Body -->
+            <path d="M 75 90 Q 100 70 125 90 Q 140 145 100 165 Q 60 145 75 90 Z" fill="#1c1917" stroke="#f59e0b" stroke-width="3"/>
+            <!-- Chest Ouroboros Glowing Core -->
+            <circle cx="100" cy="120" r="16" fill="#451a03" stroke="#ffe600" stroke-width="2.5"/>
+            <text x="100" y="125" font-family="'Fira Code', monospace" font-size="14" font-weight="bold" fill="#ffe600" text-anchor="middle">∞</text>
+            
+            <!-- Ferocious Dragon Head -->
+            <path d="M 75 65 L 100 30 L 125 65 Q 135 85 100 90 Q 65 85 75 65 Z" fill="#292524" stroke="#ffe600" stroke-width="3"/>
+            <!-- Horns -->
+            <path d="M 82 45 Q 60 20 45 28" stroke="#f59e0b" stroke-width="4" stroke-linecap="round"/>
+            <path d="M 118 45 Q 140 20 155 28" stroke="#f59e0b" stroke-width="4" stroke-linecap="round"/>
+            
+            <!-- Dragon Eyes -->
+            <polygon points="85,55 95,58 88,65" fill="#ffe600"/>
+            <polygon points="115,55 105,58 112,65" fill="#ffe600"/>
+            
+            <!-- Fire Breath Sparks -->
+            <circle cx="100" cy="98" r="3" fill="#ef4444" class="animate-ping"/>
+            <circle cx="95" cy="105" r="2" fill="#ffe600"/>
+            <circle cx="105" cy="105" r="2" fill="#f59e0b"/>
+          </svg>
+        `
+      },
+      kraken: {
+        id: 'kraken',
+        name: 'Deadlock Kraken',
+        title: 'Tier 3 • Concurrency Beast',
+        color: '#b026ff',
+        glowClass: 'bg-purple-500/15',
+        borderClass: 'border-purple-900/50',
+        animClass: 'animate-monsterFloat',
+        quip: '"Thread A locked... Thread B waiting... eternal freeze!"',
+        svg: `
+          <svg class="w-36 h-36 sm:w-40 sm:h-40 drop-shadow-[0_8px_16px_rgba(176,38,255,0.35)]" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- Pulsing Cyber Tentacles with Padlocks -->
+            <path d="M 60 120 Q 20 130 15 160 Q 30 180 50 155" stroke="#b026ff" stroke-width="4" stroke-linecap="round"/>
+            <path d="M 80 135 Q 50 160 55 185 Q 75 180 85 155" stroke="#a855f7" stroke-width="4" stroke-linecap="round"/>
+            <path d="M 120 135 Q 150 160 145 185 Q 125 180 115 155" stroke="#a855f7" stroke-width="4" stroke-linecap="round"/>
+            <path d="M 140 120 Q 180 130 185 160 Q 170 180 150 155" stroke="#b026ff" stroke-width="4" stroke-linecap="round"/>
+            
+            <!-- Kraken Mantle / Cyber Head -->
+            <path d="M 65 110 Q 55 45 100 35 Q 145 45 135 110 Q 100 135 65 110 Z" fill="#1e1b4b" stroke="#b026ff" stroke-width="3.5"/>
+            <!-- Central Evil Cyber Optic -->
+            <circle cx="100" cy="85" r="20" fill="#090d16" stroke="#b026ff" stroke-width="2.5"/>
+            <circle cx="100" cy="85" r="10" fill="#ff007f" class="animate-pulse"/>
+            <circle cx="100" cy="85" r="4" fill="#ffe600"/>
+            
+            <!-- Mutex Lock Badge -->
+            <rect x="85" y="112" width="30" height="18" rx="4" fill="#0f172a" stroke="#ffe600" stroke-width="1.5"/>
+            <text x="100" y="125" font-family="'Fira Code', monospace" font-size="10" font-weight="bold" fill="#ffe600" text-anchor="middle">🔒LOCK</text>
+          </svg>
+        `
+      }
+    };
+
+    // 4. MASSIVE TECH & ENGLISH DICTIONARIES
+    const TECH_WORDS = new Set([
+      "VAR", "LET", "CONST", "INT", "CHAR", "FLOAT", "BOOL", "BYTE", "NULL", "VOID", "TRUE", "FALSE",
+      "FOR", "WHILE", "LOOP", "IF", "ELSE", "CASE", "BREAK", "GOTO", "RETURN", "YIELD", "AWAIT", "ASYNC",
+      "CLASS", "OBJECT", "STRUCT", "ENUM", "UNION", "ARRAY", "LIST", "STACK", "QUEUE", "DEQUE", "TREE", "GRAPH",
+      "NODE", "EDGE", "HASH", "MAP", "SET", "HEAP", "TRIE", "PUSH", "POP", "SHIFT", "SLICE", "SPLICE", "JOIN",
+      "SPLIT", "FIND", "SORT", "FILTER", "REDUCE", "CONCAT", "MUTATE", "CLONE", "COPY", "FETCH", "PROMISE",
+      "THEN", "CATCH", "THROW", "TRY", "ERROR", "DEBUG", "PRINT", "LOG", "ECHO", "SCAN", "READ", "WRITE",
+      "FILE", "PATH", "URL", "HTTP", "HTTPS", "TCP", "UDP", "IP", "DNS", "PORT", "PING", "POST", "GET", "PUT",
+      "PATCH", "DELETE", "REST", "API", "JSON", "XML", "YAML", "HTML", "CSS", "DOM", "EVENT", "CLICK", "HOVER",
+      "KEY", "MOUSE", "STATE", "PROPS", "HOOK", "REDUX", "FLUX", "MVC", "REPO", "GIT", "COMMIT", "PULL",
+      "MERGE", "BRANCH", "REBASE", "STASH", "DIFF", "LINUX", "UNIX", "BASH", "SHELL", "ROOT", "SUDO", "KERNEL",
+      "PROCESS", "THREAD", "LOCK", "MUTEX", "MEMORY", "BUFFER", "CACHE", "RAM", "ROM", "CPU", "GPU", "CORE",
+      "BIT", "WORD", "BINARY", "HEX", "OCTAL", "REGEX", "PARSE", "TOKEN", "AST", "COMPILE", "RUNTIME", "BYTECODE",
+      "JVM", "GC", "LEAK", "RECURSION", "ALGORITHM", "BIGO", "QUICK", "BUBBLE", "SEARCH", "DFS", "BFS",
+      "MATRIX", "VECTOR", "TENSOR", "AI", "ML", "MODEL", "EPOCH", "BATCH", "TRAIN", "INFER", "SQL", "SELECT",
+      "FROM", "WHERE", "GROUP", "ORDER", "TABLE", "INDEX", "QUERY", "SCHEMA", "ACID", "NOSQL", "MONGO", "REDIS",
+      "DOCKER", "CONTAINER", "IMAGE", "BUILD", "DEPLOY", "TEST", "UNIT", "MOCK", "STUB", "ASSERT", "EXPECT",
+      "LINT", "VITE", "BABEL", "RUST", "GOLANG", "PYTHON", "JAVA", "RUBY", "SWIFT", "KOTLIN", "DART", "SCALA",
+      "LISP", "WASM", "CLOUD", "AWS", "AZURE", "LAMBDA", "AUTH", "OAUTH", "JWT", "COOKIE", "SESSION", "CORS",
+      "CSRF", "XSS", "CIPHER", "CRYPTO", "SHA", "RSA", "AES", "ENCRYPT", "DECRYPT", "CERT", "SSL", "TLS",
+      "PROXY", "VPN", "GATEWAY", "ROUTER", "SWITCH", "PACKET", "SOCKET", "WORKER", "ACTION", "STORE",
+      "CONTEXT", "EFFECT", "MEMO", "REF", "SSR", "SSG", "SPA", "PWA", "CANVAS", "WEBGL", "SHADER", "PIXEL",
+      "SPRITE", "AUDIO", "DELTA", "TICK", "FPS", "HITBOX", "ENTITY", "ECS", "PARAM", "ARG", "SCOPE", "CLOSURE",
+      "HOIST", "PROTO", "THIS", "SUPER", "EXTENDS", "STATIC", "PUBLIC", "PRIVATE", "FINAL", "INLINE", "IMPORT",
+      "EXPORT", "DEFAULT", "MODULE", "BUNDLE", "NPM", "YARN", "PNPM", "CARGO", "PIP", "GRADLE", "MAVEN",
+      "ASSERT", "CATCH", "FINALLY", "SWITCH", "DEFAULT", "CONTINUE", "DEF", "ELIF", "PASS", "WITH", "AS",
+      "LAMBDA", "GLOBAL", "NONLOCAL", "DEL", "RAISE", "EXCEPT", "IS", "IN", "NOT", "AND", "OR", "XOR", "NAND",
+      "NOR", "MODULO", "DIV", "MUL", "SUB", "ADD", "SHL", "SHR", "INCREMENT", "DECREMENT", "OPERATOR", "CAST"
+    ]);
+
+    // Common English Words (3 to 8 letters)
+    const COMMON_WORDS = new Set([
+      "THE", "AND", "FOR", "ARE", "BUT", "NOT", "YOU", "ALL", "ANY", "CAN", "HAD", "HER", "WAS", "ONE", "OUR",
+      "OUT", "DAY", "GET", "HAS", "HIM", "HIS", "HOW", "MAN", "NEW", "NOW", "OLD", "SEE", "TWO", "WAY", "WHO",
+      "BOY", "DID", "ITS", "LET", "PUT", "SAY", "SHE", "TOO", "USE", "ACT", "ADD", "AGE", "AGO", "AIR", "ARM",
+      "ART", "BAD", "BAG", "BAR", "BED", "BIG", "BOX", "BUS", "CAR", "CAT", "CUT", "DOG", "DRY", "EAR", "EAT",
+      "END", "EYE", "FAR", "FEW", "FIT", "FLY", "GAS", "GOD", "GUN", "HAT", "HIT", "HOT", "ICE", "JOB", "KEY",
+      "LAW", "LEG", "LIE", "LOW", "MAP", "MAY", "MEN", "NET", "NOR", "OFF", "OIL", "PAY", "PEN", "PER", "PIG",
+      "PIN", "POT", "RAN", "RED", "ROD", "ROW", "RUN", "SEA", "SET", "SEW", "SIT", "SIX", "SON", "SUN", "TAX",
+      "TEA", "TEN", "TIE", "TIP", "TOP", "WAR", "WIN", "YES", "YET", "ZIP", "ABLE", "ACID", "AGED", "ALSO",
+      "AREA", "ARMY", "AWAY", "BABY", "BACK", "BALL", "BAND", "BANK", "BASE", "BATH", "BEAR", "BEAT", "BEEN",
+      "BEER", "BELL", "BELT", "BEST", "BILL", "BIRD", "BLOW", "BLUE", "BOAT", "BODY", "BOMB", "BOND", "BONE",
+      "BOOK", "BOOM", "BORN", "BOSS", "BOTH", "BOWL", "BULK", "BURN", "BUSH", "BUSY", "CALL", "CALM", "CAMP",
+      "CARD", "CARE", "CASE", "CASH", "CAST", "CELL", "CHAT", "CHIP", "CITY", "CLUB", "COAL", "COAT", "CODE",
+      "COLD", "COME", "COOK", "COOL", "COPE", "COPY", "CORE", "COST", "CREW", "CROP", "DARK", "DATA", "DATE",
+      "DAWN", "DAYS", "DEAD", "DEAL", "DEAN", "DEAR", "DEBT", "DEEP", "DENY", "DESK", "DIAL", "DIED", "DIET",
+      "DISC", "DISK", "DOES", "DONE", "DOOR", "DOSE", "DOWN", "DRAW", "DREW", "DROP", "DRUG", "DUAL", "DUKE",
+      "DUST", "DUTY", "EACH", "EARN", "EASE", "EAST", "EASY", "EDGE", "ELSE", "EVEN", "EVER", "EVIL", "EXAM",
+      "FACE", "FACT", "FAIL", "FAIR", "FALL", "FARM", "FAST", "FATE", "FEAR", "FEED", "FEEL", "FEET", "FELL",
+      "FILE", "FILL", "FILM", "FIND", "FINE", "FIRE", "FIRM", "FISH", "FIVE", "FLAT", "FLOW", "FOOD", "FOOT",
+      "FORM", "FORT", "FOUR", "FREE", "FROM", "FUEL", "FULL", "FUND", "GAIN", "GAME", "GATE", "GEAR", "GENE",
+      "GIFT", "GIRL", "GIVE", "GLAD", "GOAL", "GOES", "GOLD", "GOLF", "GONE", "GOOD", "GRAY", "GREW", "GREY",
+      "GROW", "GULF", "HAIR", "HALF", "HALL", "HAND", "HANG", "HARD", "HARM", "HATE", "HAVE", "HEAD", "HEAR",
+      "HEAT", "HELD", "HELL", "HELP", "HERE", "HERO", "HIGH", "HILL", "HIRE", "HOLD", "HOLE", "HOLY", "HOME",
+      "HOPE", "HOST", "HOUR", "HUGE", "HUNG", "HUNT", "HURT", "IDEA", "INCH", "INTO", "IRON", "ITEM", "JACK",
+      "JOIN", "JUMP", "JURY", "JUST", "KEEN", "KEEP", "KEPT", "KICK", "KILL", "KIND", "KING", "KNEE", "KNEW",
+      "KNOW", "LACK", "LADY", "LAID", "LAKE", "LAND", "LANE", "LAST", "LATE", "LEAD", "LEFT", "LESS", "LIFE",
+      "LIFT", "LIKE", "LINE", "LINK", "LION", "LIST", "LIVE", "LOAD", "LOAN", "LOCK", "LOGO", "LONG", "LOOK",
+      "LORD", "LOSE", "LOSS", "LOST", "LOVE", "LUCK", "MADE", "MAIL", "MAIN", "MAKE", "MALE", "MANY", "MARK",
+      "MASS", "MATT", "MEAL", "MEAN", "MEAT", "MEET", "MENU", "MERE", "MIKE", "MILE", "MILK", "MILL", "MIND",
+      "MINE", "MISS", "MODE", "MOOD", "MOON", "MORE", "MOST", "MOVE", "MUCH", "MUST", "NAME", "NAVY", "NEAR",
+      "NECK", "NEED", "NEWS", "NEXT", "NICE", "NICK", "NINE", "NONE", "NOSE", "NOTE", "OKAY", "ONCE", "ONLY",
+      "ONTO", "OPEN", "ORAL", "OVER", "PACE", "PACK", "PAGE", "PAID", "PAIN", "PAIR", "PALM", "PARK", "PART",
+      "PASS", "PAST", "PATH", "PEAK", "PEER", "PICK", "PILE", "PINE", "PINK", "PIPE", "PLAN", "PLAY", "PLOT",
+      "PLUG", "PLUS", "POEM", "POET", "POLL", "POOL", "POOR", "PORT", "POST", "POUR", "PRAY", "PURE", "PUSH",
+      "RACE", "RAIL", "RAIN", "RANK", "RARE", "RATE", "READ", "REAL", "REAR", "RELY", "RENT", "REST", "RICE",
+      "RICH", "RIDE", "RING", "RISE", "RISK", "ROAD", "ROCK", "ROLE", "ROLL", "ROOF", "ROOM", "ROOT", "ROSE",
+      "RULE", "RUSH", "SAFE", "SAID", "SAIL", "SALE", "SAME", "SAND", "SAVE", "SEAT", "SEED", "SEEK", "SEEM",
+      "SEEN", "SELF", "SELL", "SEND", "SENT", "SEPT", "SHIP", "SHOP", "SHOT", "SHOW", "SHUT", "SICK", "SIDE",
+      "SIGN", "SITE", "SIZE", "SKIN", "SLIP", "SLOW", "SNOW", "SOFT", "SOIL", "SOLD", "SOLE", "SOME", "SONG",
+      "SOON", "SORT", "SOUL", "SPOT", "STAR", "STAY", "STEP", "STOP", "SUCH", "SUIT", "SURE", "TAKE", "TALE",
+      "TALK", "TALL", "TANK", "TAPE", "TASK", "TEAM", "TECH", "TELL", "TEND", "TERM", "TEST", "TEXT", "THAN",
+      "THAT", "THEM", "THEN", "THEY", "THIN", "THIS", "THOU", "THUS", "TIDE", "TIED", "TILL", "TIME", "TINY",
+      "TOLD", "TOLL", "TONE", "TOOK", "TOOL", "TOUR", "TOWN", "TREE", "TRIP", "TRUE", "TUNE", "TURN", "TWIN",
+      "TYPE", "UNIT", "UPON", "USED", "USER", "VARY", "VAST", "VERY", "VICE", "VIEW", "VOTE", "WAGE", "WAIT",
+      "WAKE", "WALK", "WALL", "WANT", "WARM", "WARN", "WASH", "WAVE", "WAYS", "WEAK", "WEAR", "WEEK", "WELL",
+      "WENT", "WERE", "WEST", "WHAT", "WHEN", "WHOM", "WIDE", "WIFE", "WILD", "WILL", "WIND", "WINE", "WING",
+      "WISH", "WITH", "WOOD", "WORD", "WORE", "WORK", "YARD", "YEAR", "ZERO", "ZONE",
+      "ABOUT", "ABOVE", "ACTOR", "ACUTE", "ADMIT", "ADOPT", "ADULT", "AFTER", "AGAIN", "AGENT", "AGREE", "AHEAD",
+      "ALARM", "ALBUM", "ALERT", "ALIKE", "ALIVE", "ALLOW", "ALONE", "ALONG", "ALTER", "AMONG", "ANGER", "ANGLE",
+      "ANGRY", "APART", "APPLE", "APPLY", "ARENA", "ARGUE", "ARISE", "ARMED", "ARROW", "ASIDE", "ASSET", "AVOID",
+      "AWARD", "AWARE", "BADLY", "BAKER", "BASES", "BASIC", "BASIS", "BEACH", "BEGAN", "BEGIN", "BEGUN", "BEING",
+      "BELOW", "BENCH", "BILLY", "BIRTH", "BLACK", "BLAME", "BLIND", "BLOCK", "BLOOD", "BOARD", "BOAST", "BOOST",
+      "BOOTH", "BOUND", "BRAIN", "BRAND", "BREAD", "BREAK", "BREED", "BRIEF", "BRING", "BROAD", "BROKE", "BROWN",
+      "BUILD", "BUILT", "BUYER", "CABLE", "CALIF", "CARRY", "CATCH", "CAUSE", "CHAIN", "CHAIR", "CHART", "CHASE",
+      "CHEAP", "CHECK", "CHEST", "CHIEF", "CHILD", "CHINA", "CHOSE", "CIVIL", "CLAIM", "CLASS", "CLEAN", "CLEAR",
+      "CLICK", "CLOCK", "CLOSE", "COACH", "COAST", "COULD", "COUNT", "COURT", "COVER", "CRAFT", "CRASH", "CRAZY",
+      "CREAM", "CRIME", "CROSS", "CROWD", "CROWN", "CRUDE", "CURVE", "CYCLE", "DAILY", "DANCE", "DATED", "DEALT",
+      "DEATH", "DEBUT", "DELAY", "DEPTH", "DOING", "DOUBT", "DOZEN", "DRAFT", "DRAMA", "DRANK", "DRAWN", "DREAM",
+      "DRESS", "DRIFT", "DRINK", "DRIVE", "DROVE", "DYING", "EAGER", "EARLY", "EARTH", "EIGHT", "ELITE", "EMPTY",
+      "ENEMY", "ENJOY", "ENTER", "ENTRY", "EQUAL", "ERROR", "EVENT", "EVERY", "EXACT", "EXIST", "EXTRA", "FAITH",
+      "FALSE", "FAULT", "FIBER", "FIELD", "FIFTH", "FIFTY", "FIGHT", "FINAL", "FIRST", "FIXED", "FLASH", "FLEET",
+      "FLOOR", "FLUID", "FOCUS", "FORCE", "FORTH", "FORTY", "FORUM", "FOUND", "FRAME", "FRANK", "FRAUD", "FRESH",
+      "FRONT", "FRUIT", "FULLY", "FUNNY", "GIANT", "GIVEN", "GLASS", "GLOBE", "GOING", "GRACE", "GRADE", "GRAND",
+      "GRANT", "GRASS", "GREAT", "GREEN", "GROSS", "GROUP", "GROWN", "GUARD", "GUESS", "GUEST", "GUIDE", "HAPPY",
+      "HARRY", "HEART", "HEAVY", "HENCE", "HENRY", "HORSE", "HOTEL", "HOUSE", "HUMAN", "IDEAL", "IMAGE", "INDEX",
+      "INNER", "INPUT", "ISSUE", "JAPAN", "JIMMY", "JOINT", "JONES", "JUDGE", "KNOWN", "LABEL", "LARGE", "LASER",
+      "LATER", "LAUGH", "LAYER", "LEARN", "LEASE", "LEAST", "LEAVE", "LEGAL", "LEVEL", "LEWIS", "LIGHT", "LIMIT",
+      "LINKS", "LIVES", "LOCAL", "LOGIC", "LOOSE", "LOWER", "LUCKY", "LUNCH", "LYING", "MAGIC", "MAJOR", "MAKER",
+      "MARCH", "MATCH", "MAYOR", "MEANT", "MEDIA", "METAL", "MIGHT", "MINOR", "MINUS", "MIXED", "MODEL", "MONEY",
+      "MONTH", "MORAL", "MOTOR", "MOUNT", "MOUSE", "MOUTH", "MOVIE", "MUSIC", "NEEDS", "NEVER", "NIGHT", "NOISE",
+      "NORTH", "NOTED", "NOVEL", "NURSE", "OCCUR", "OCEAN", "OFFER", "OFTEN", "ORDER", "OTHER", "OUGHT", "PAINT",
+      "PANEL", "PAPER", "PARTY", "PEACE", "PETER", "PHASE", "PHONE", "PHOTO", "PIECE", "PILOT", "PITCH", "PLACE",
+      "PLAIN", "PLANE", "PLANT", "PLATE", "POINT", "POUND", "POWER", "PRESS", "PRICE", "PRIDE", "PRIME", "PRINT",
+      "PRIOR", "PRIZE", "PROOF", "PROUD", "PROVE", "QUEEN", "QUICK", "QUIET", "QUITE", "RADIO", "RAISE", "RANGE",
+      "RAPID", "RATIO", "REACH", "READY", "REFER", "RIGHT", "RIVAL", "RIVER", "ROBIN", "ROGER", "ROMAN", "ROUGH",
+      "ROUND", "ROUTE", "ROYAL", "RURAL", "SCALE", "SCENE", "SCOPE", "SCORE", "SENSE", "SERVE", "SEVEN", "SHALL",
+      "SHAPE", "SHARE", "SHARP", "SHEET", "SHELF", "SHELL", "SHIFT", "SHINE", "SHIRT", "SHOCK", "SHOOT", "SHORT",
+      "SHOWN", "SIGHT", "SINCE", "SIXTY", "SIZED", "SKILL", "SLEEP", "SLIDE", "SMALL", "SMART", "SMILE", "SMITH",
+      "SMOKE", "SOLID", "SOLVE", "SORRY", "SOUND", "SOUTH", "SPACE", "SPARE", "SPEAK", "SPEED", "SPEND", "SPENT",
+      "SPLIT", "SPOKE", "SPORT", "STAFF", "STAGE", "STAKE", "STAND", "START", "STATE", "STEAM", "STEEL", "STICK",
+      "STILL", "STOCK", "STONE", "STOOD", "STORE", "STORM", "STORY", "STRIP", "STUCK", "STUDY", "STUFF", "STYLE",
+      "SUGAR", "SUITE", "SUPER", "SWEET", "TABLE", "TAKEN", "TASTE", "TAXES", "TEACH", "TEETH", "TERRY", "TEXAS",
+      "THANK", "THEFT", "THEIR", "THEME", "THERE", "THESE", "THICK", "THING", "THINK", "THIRD", "THOSE", "THREE",
+      "THREW", "THROW", "TIGHT", "TIMES", "TIRED", "TITLE", "TODAY", "TOPIC", "TOTAL", "TOUCH", "TOUGH", "TOWER",
+      "TRACK", "TRADE", "TRAIN", "TREAT", "TREND", "TRIAL", "TRIED", "TRIES", "TRUCK", "TRULY", "TRUST", "TRUTH",
+      "TWICE", "UNDER", "UNDUE", "UNION", "UNITY", "UNTIL", "UPPER", "UPSET", "URBAN", "USAGE", "USUAL", "VALID",
+      "VALUE", "VIDEO", "VIRUS", "VISIT", "VITAL", "VOICE", "WASTE", "WATCH", "WATER", "WHEEL", "WHERE", "WHICH",
+      "WHILE", "WHITE", "WHOLE", "WHOSE", "WOMAN", "WOMEN", "WORLD", "WORRY", "WORSE", "WORST", "WORTH", "WOULD",
+      "WOUND", "WRITE", "WRONG", "WROTE", "YIELD", "YOUNG", "YOUTH"
+    ]);
+
+    // 5. RICH PROGRAMMING QUIZ DATABASE WITH ASSIGNED MONSTERS
+    const QUIZ_QUESTIONS = [
+      {
+        id: 1,
+        stageLabel: "Stage 1-1",
+        monsterType: 'spider',
+        category: "JavaScript Basics",
+        prompt: "Which keyword declares a block-scoped variable that cannot be reassigned after initialization?",
+        snippet: "_____ PI = 3.14159;\nPI = 4; // TypeError: Assignment to constant variable",
+        targetWord: "CONST",
+        clue: "5 letters • Starts with C • Constant identifier",
+        bonusWords: ["VAR", "LET", "MUTATE", "ASSIGN", "TYPE", "SCOPE"],
+        hp: 75
+      },
+      {
+        id: 2,
+        stageLabel: "Stage 1-2",
+        monsterType: 'slime',
+        category: "Data Structures",
+        prompt: "Which Last-In, First-Out (LIFO) data structure is used to manage function call execution frames?",
+        snippet: "function recurse(n) {\n  if (n <= 0) return;\n  recurse(n - 1); // Pushing frame to _____\n}",
+        targetWord: "STACK",
+        clue: "5 letters • Rhymes with PACK • Overflows on infinite recursion",
+        bonusWords: ["QUEUE", "HEAP", "FRAME", "PUSH", "POP", "CALL", "NODE"],
+        hp: 85
+      },
+      {
+        id: 3,
+        stageLabel: "Stage 1-3",
+        monsterType: 'phantom',
+        category: "Asynchronous JS",
+        prompt: "What object represents the eventual completion or failure of an asynchronous operation?",
+        snippet: "function loadUser() {\n  return new _____((resolve, reject) => {\n    fetch('/api').then(resolve);\n  });\n}",
+        targetWord: "PROMISE",
+        clue: "7 letters • Has .then() and .catch() methods",
+        bonusWords: ["ASYNC", "AWAIT", "THEN", "CATCH", "RESOLVE", "REJECT", "FETCH"],
+        hp: 95
+      },
+      {
+        id: 4,
+        stageLabel: "Stage 2-1",
+        monsterType: 'spider',
+        category: "Array Methods",
+        prompt: "Which array method removes the LAST element from an array and returns that element?",
+        snippet: "const items = ['a', 'b', 'c'];\nconst last = items._____(); // returns 'c', length is now 2",
+        targetWord: "POP",
+        clue: "3 letters • Pairs with PUSH in stack operations",
+        bonusWords: ["PUSH", "SHIFT", "SLICE", "SPLICE", "ARRAY", "FIND", "MAP"],
+        hp: 80
+      },
+      {
+        id: 5,
+        stageLabel: "Stage 2-2",
+        monsterType: 'kraken',
+        category: "Git & Version Control",
+        prompt: "Which Git command incorporates changes from the named branch into the current checked-out branch?",
+        snippet: "git checkout main\ngit _____ feature-auth\n// Combines feature-auth commits into main",
+        targetWord: "MERGE",
+        clue: "5 letters • Starts with M • Can produce merge conflicts",
+        bonusWords: ["BRANCH", "COMMIT", "PULL", "PUSH", "REBASE", "STASH", "CLONE", "DIFF"],
+        hp: 95
+      },
+      {
+        id: 6,
+        stageLabel: "Stage 2-3",
+        monsterType: 'slime',
+        category: "Databases & SQL",
+        prompt: "Which SQL clause filters records based on specified search criteria?",
+        snippet: "SELECT id, username, email \nFROM users \n_____ is_active = true;",
+        targetWord: "WHERE",
+        clue: "5 letters • Starts with W • Filters query results",
+        bonusWords: ["SELECT", "FROM", "GROUP", "ORDER", "TABLE", "QUERY", "INDEX", "JOIN"],
+        hp: 90
+      },
+      {
+        id: 7,
+        stageLabel: "Stage 3-1",
+        monsterType: 'dragon',
+        category: "Control Flow",
+        prompt: "Which statement terminates the current loop, switch, or labelled block immediately?",
+        snippet: "while (true) {\n  if (queue.isEmpty()) {\n    _____; // Terminate loop execution\n  }\n}",
+        targetWord: "BREAK",
+        clue: "5 letters • Starts with B • Opposite of CONTINUE",
+        bonusWords: ["WHILE", "LOOP", "FOR", "CASE", "GOTO", "RETURN", "YIELD"],
+        hp: 110
+      },
+      {
+        id: 8,
+        stageLabel: "Stage 3-2",
+        monsterType: 'phantom',
+        category: "Data Structures & Trees",
+        prompt: "What hierarchical nonlinear data structure consists of nodes connected by edges with a root node?",
+        snippet: "class TreeNode {\n  int val;\n  TreeNode left, right; // Binary _____\n}",
+        targetWord: "TREE",
+        clue: "4 letters • Has leaves, branches, and root",
+        bonusWords: ["NODE", "GRAPH", "EDGE", "ROOT", "LEAF", "TRIE", "HEAP", "DFS", "BFS"],
+        hp: 100
+      },
+      {
+        id: 9,
+        stageLabel: "Stage 3-3",
+        monsterType: 'spider',
+        category: "Type Systems & Memory",
+        prompt: "Which primitive value represents the intentional absence of any object value or reference in JavaScript?",
+        snippet: "let userProfile = _____; // Explicitly set to represent empty object reference",
+        targetWord: "NULL",
+        clue: "4 letters • Distinct from undefined",
+        bonusWords: ["VOID", "NIL", "NONE", "ZERO", "EMPTY", "UNDEFINED", "TYPE"],
+        hp: 95
+      },
+      {
+        id: 10,
+        stageLabel: "Stage 4-Boss",
+        monsterType: 'dragon',
+        category: "Cloud & DevOps",
+        prompt: "What platform packages code and all its dependencies into standardized lightweight containers?",
+        snippet: "FROM node:20-alpine\nCOPY . .\nRUN npm install\n# Running inside a _____ container",
+        targetWord: "DOCKER",
+        clue: "6 letters • Iconic blue whale logo",
+        bonusWords: ["IMAGE", "CONTAINER", "BUILD", "DEPLOY", "CLOUD", "LINUX", "SERVER"],
+        hp: 130
+      }
+    ];
+
+    // Scrabble-style letter points
+    const LETTER_POINTS = {
+      A: 1, B: 3, C: 3, D: 2, E: 1, F: 4, G: 2, H: 4, I: 1, J: 8, K: 5, L: 1, M: 3,
+      N: 1, O: 1, P: 3, Q: 10, R: 1, S: 1, T: 1, U: 1, V: 4, W: 4, X: 8, Y: 4, Z: 10
+    };
+
+    // Frequency weighting for letter tile generation
+    const LETTER_POOL = [
+      'A', 'A', 'A', 'A', 'A', 'A', 'B', 'B', 'C', 'C', 'C', 'D', 'D', 'D', 'E', 'E', 'E', 'E', 'E', 'E', 'E', 'E',
+      'F', 'F', 'G', 'G', 'H', 'H', 'I', 'I', 'I', 'I', 'I', 'J', 'K', 'L', 'L', 'L', 'L', 'M', 'M', 'M', 'N', 'N',
+      'N', 'N', 'O', 'O', 'O', 'O', 'O', 'P', 'P', 'P', 'Q', 'R', 'R', 'R', 'R', 'R', 'S', 'S', 'S', 'S', 'S', 'T',
+      'T', 'T', 'T', 'T', 'U', 'U', 'U', 'V', 'W', 'W', 'X', 'Y', 'Y', 'Z'
+    ];
+
+    // Gem tile types
+    const GEM_TYPES = [
+      { type: 'diamond', name: 'Diamond', class: 'gem-diamond', bonus: '3x DMG' },
+      { type: 'ruby', name: 'Ruby', class: 'gem-ruby', bonus: 'Burn DOT' },
+      { type: 'sapphire', name: 'Sapphire', class: 'gem-sapphire', bonus: 'Freeze Turn' },
+      { type: 'emerald', name: 'Emerald', class: 'gem-emerald', bonus: '+25 HP' },
+      { type: 'gold', name: 'Gold', class: 'gem-gold', bonus: '2x Points' }
+    ];
+
+    // 6. MAIN GAME ENGINE
+    class GameEngine {
+      constructor() {
+        // Player state
+        this.playerHp = 100;
+        this.playerMaxHp = 100;
+        this.score = 0;
+        this.streak = 0;
+        this.stageIndex = 0;
+
+        // Inventory powerups
+        this.inventory = {
+          coffee: 2,
+          scramble: 3,
+          debug: 2,
+          burst: 1
+        };
+
+        // Monster & question state
+        this.currentQuestion = null;
+        this.currentMonster = null;
+        this.bossHp = 80;
+        this.bossMaxHp = 80;
+        this.bossTurnCountdown = 3;
+        this.burnTurnsRemaining = 0;
+
+        // Letter board & tray state
+        this.gridTiles = [];
+        this.selectedTileIds = [];
+
+        // DOM elements
+        this.dom = {
+          stageText: document.getElementById('hud-stage'),
+          scoreText: document.getElementById('hud-score'),
+          streakText: document.getElementById('hud-streak'),
+          streakFlame: document.getElementById('streak-flame'),
+          heroHpText: document.getElementById('hero-hp-text'),
+          heroHpBar: document.getElementById('hero-hp-bar'),
+          heroTitle: document.getElementById('hero-title'),
+          heroLevelBadge: document.getElementById('hero-level-badge'),
+          heroAvatar: document.getElementById('hero-avatar'),
+          // Monster DOM
+          monsterPanel: document.getElementById('monster-panel'),
+          monsterBadge: document.getElementById('monster-badge'),
+          monsterTitle: document.getElementById('monster-title'),
+          bossName: document.getElementById('boss-name'),
+          monsterAvatar: document.getElementById('monster-avatar'),
+          monsterQuip: document.getElementById('monster-quip'),
+          monsterGlow: document.getElementById('monster-glow'),
+          bossHpText: document.getElementById('boss-hp-text'),
+          bossHpBar: document.getElementById('boss-hp-bar'),
+          bossTurnTimer: document.getElementById('boss-turn-timer'),
+          bossTurnPips: document.getElementById('boss-turn-pips'),
+          // Terminal DOM
+          questionCategory: document.getElementById('question-category'),
+          targetWordHint: document.getElementById('target-word-hint'),
+          questionPrompt: document.getElementById('question-prompt'),
+          questionSnippet: document.getElementById('question-snippet'),
+          questionClueText: document.getElementById('question-clue-text'),
+          currentWordSlots: document.getElementById('current-word-slots'),
+          letterGrid: document.getElementById('letter-grid'),
+          wordEvalPill: document.getElementById('word-eval-pill'),
+          wordEvalType: document.getElementById('word-eval-type'),
+          wordEvalPts: document.getElementById('word-eval-pts'),
+          btnSubmit: document.getElementById('btn-submit'),
+          btnClear: document.getElementById('btn-clear'),
+          btnBackspace: document.getElementById('btn-backspace'),
+          btnSound: document.getElementById('btn-sound'),
+          btnHelp: document.getElementById('btn-help'),
+          modalHelp: document.getElementById('modal-help'),
+          modalVictory: document.getElementById('modal-victory'),
+          modalGameOver: document.getElementById('modal-gameover'),
+          btnNextStage: document.getElementById('btn-next-stage'),
+          btnRestart: document.getElementById('btn-restart'),
+          // Powerups
+          itemCoffee: document.getElementById('item-coffee'),
+          itemCoffeeCount: document.getElementById('item-coffee-count'),
+          itemScramble: document.getElementById('item-scramble'),
+          itemScrambleCount: document.getElementById('item-scramble-count'),
+          itemDebug: document.getElementById('item-debug'),
+          itemDebugCount: document.getElementById('item-debug-count'),
+          itemBurst: document.getElementById('item-burst'),
+          itemBurstCount: document.getElementById('item-burst-count'),
+        };
+
+        this.initEventListeners();
+        this.loadStage(0);
+      }
+
+      initEventListeners() {
+        // Sound toggle
+        this.dom.btnSound.addEventListener('click', () => {
+          const isMuted = sound.toggleMute();
+          this.dom.btnSound.textContent = isMuted ? '🔇' : '🔊';
+        });
+
+        // Modals
+        this.dom.btnHelp.addEventListener('click', () => this.toggleHelpModal(true));
+        document.getElementById('btn-close-help').addEventListener('click', () => this.toggleHelpModal(false));
+        document.getElementById('btn-close-help-2').addEventListener('click', () => this.toggleHelpModal(false));
+        this.dom.btnNextStage.addEventListener('click', () => this.nextStage());
+        this.dom.btnRestart.addEventListener('click', () => this.restartGame());
+
+        // Word Action Buttons
+        this.dom.btnSubmit.addEventListener('click', () => this.submitWord());
+        this.dom.btnClear.addEventListener('click', () => this.clearSelection());
+        this.dom.btnBackspace.addEventListener('click', () => this.backspace());
+
+        // Consumables Powerup Buttons
+        this.dom.itemCoffee.addEventListener('click', () => this.useCoffee());
+        this.dom.itemScramble.addEventListener('click', () => this.useScramble());
+        this.dom.itemDebug.addEventListener('click', () => this.useDebugHint());
+        this.dom.itemBurst.addEventListener('click', () => this.useZeroDayBurst());
+
+        // Keyboard Typing Event Handler
+        window.addEventListener('keydown', (e) => {
+          if (!this.dom.modalHelp.classList.contains('hidden')) {
+            if (e.key === 'Escape') this.toggleHelpModal(false);
+            return;
+          }
+          if (!this.dom.modalVictory.classList.contains('hidden')) {
+            if (e.key === 'Enter') this.nextStage();
+            return;
+          }
+          if (!this.dom.modalGameOver.classList.contains('hidden')) {
+            if (e.key === 'Enter') this.restartGame();
+            return;
+          }
+
+          if (e.key === 'Enter') {
+            e.preventDefault();
+            this.submitWord();
+          } else if (e.key === 'Backspace') {
+            e.preventDefault();
+            this.backspace();
+          } else if (e.key === 'Escape') {
+            e.preventDefault();
+            this.clearSelection();
+          } else if (e.key.toLowerCase() === 'r' && !e.ctrlKey && !e.metaKey && !e.altKey) {
+            // Hotkey R triggers Scramble if player has items
+            if (this.selectedTileIds.length === 0 && this.inventory.scramble > 0) {
+              this.useScramble();
+              return;
+            }
+          } else if (e.key.toLowerCase() === 'd' && !e.ctrlKey && !e.metaKey && !e.altKey) {
+            // Hotkey D triggers Lint
+            if (this.selectedTileIds.length === 0 && this.inventory.debug > 0) {
+              this.useDebugHint();
+              return;
+            }
+          }
+
+          // Direct letter typing
+          const letter = e.key.toUpperCase();
+          if (/^[A-Z]$/.test(letter) && !e.ctrlKey && !e.altKey && !e.metaKey) {
+            this.handleKeyboardLetter(letter);
+          }
+        });
+      }
+
+      toggleHelpModal(show) {
+        this.dom.modalHelp.classList.toggle('hidden', !show);
+      }
+
+      loadStage(index) {
+        this.stageIndex = index;
+        const qIndex = index % QUIZ_QUESTIONS.length;
+        this.currentQuestion = QUIZ_QUESTIONS[qIndex];
+        this.currentMonster = MONSTERS[this.currentQuestion.monsterType] || MONSTERS.spider;
+
+        this.bossHp = this.currentQuestion.hp;
+        this.bossMaxHp = this.currentQuestion.hp;
+        this.bossTurnCountdown = 3;
+        this.burnTurnsRemaining = 0;
+
+        // Update HUD
+        this.dom.stageText.textContent = this.currentQuestion.stageLabel || `Stage ${Math.floor(this.stageIndex / 3) + 1}-${(this.stageIndex % 3) + 1}`;
+
+        // Update Monster Visuals & Avatar
+        this.dom.bossName.textContent = this.currentMonster.name;
+        this.dom.monsterTitle.textContent = this.currentMonster.title;
+        this.dom.monsterQuip.textContent = this.currentMonster.quip;
+        this.dom.monsterAvatar.className = `relative select-none ${this.currentMonster.animClass} monster-spawn`;
+        this.dom.monsterAvatar.innerHTML = this.currentMonster.svg;
+
+        // Remove spawn class after animation
+        setTimeout(() => {
+          this.dom.monsterAvatar.classList.remove('monster-spawn');
+        }, 550);
+
+        // Update Terminal / Quiz Details
+        this.dom.questionCategory.textContent = `[ ${this.currentQuestion.category} ]`;
+        this.dom.questionPrompt.textContent = this.currentQuestion.prompt;
+        this.dom.questionSnippet.textContent = this.currentQuestion.snippet;
+        this.dom.questionClueText.textContent = this.currentQuestion.clue;
+
+        const len = this.currentQuestion.targetWord.length;
+        this.dom.targetWordHint.textContent = `${this.currentQuestion.targetWord[0]} ${'_ '.repeat(len - 1).trim()}`;
+
+        this.updateBossHpBar();
+        this.updateHeroHpBar();
+        this.updateBossTurnDisplay();
+        this.updateInventoryDisplay();
+
+        // Populate Letter Grid
+        this.generateLetterGrid();
+        this.clearSelection();
+      }
+
+      generateLetterGrid() {
+        this.gridTiles = [];
+        this.selectedTileIds = [];
+
+        // Guarantee that target word letters are available in the bag
+        const targetLetters = this.currentQuestion.targetWord.split('');
+        const lettersToSeed = [...targetLetters];
+
+        while (lettersToSeed.length < 16) {
+          const randLetter = LETTER_POOL[Math.floor(Math.random() * LETTER_POOL.length)];
+          lettersToSeed.push(randLetter);
+        }
+
+        // Shuffle
+        for (let i = lettersToSeed.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [lettersToSeed[i], lettersToSeed[j]] = [lettersToSeed[j], lettersToSeed[i]];
+        }
+
+        // Build 16 tiles
+        for (let i = 0; i < 16; i++) {
+          const letter = lettersToSeed[i];
+          const points = LETTER_POINTS[letter] || 1;
+
+          let gem = null;
+          if (Math.random() < 0.16) {
+            gem = GEM_TYPES[Math.floor(Math.random() * GEM_TYPES.length)];
+          }
+
+          this.gridTiles.push({
+            id: `tile-${i}-${Date.now()}-${Math.random()}`,
+            letter,
+            points,
+            gem,
+            isUsed: false
+          });
+        }
+
+        this.renderLetterGrid();
+      }
+
+      renderLetterGrid() {
+        this.dom.letterGrid.innerHTML = '';
+
+        this.gridTiles.forEach(tile => {
+          const btn = document.createElement('button');
+          btn.id = tile.id;
+          btn.className = `arcade-tile relative flex flex-col items-center justify-center p-2 rounded-xl font-mono select-none h-14 sm:h-16 border-2 transition ${tile.gem ? tile.gem.class : 'bg-slate-800/90 border-slate-700/80 text-white hover:border-cyan-400'
+            }`;
+
+          if (tile.isUsed) {
+            btn.classList.add('selected');
+            btn.disabled = true;
+          }
+
+          const letterSpan = document.createElement('span');
+          letterSpan.className = `text-xl sm:text-2xl font-black tracking-tight ${tile.gem ? '' : 'text-slate-100'}`;
+          letterSpan.textContent = tile.letter;
+          btn.appendChild(letterSpan);
+
+          const ptsBadge = document.createElement('span');
+          ptsBadge.className = 'absolute top-1 right-1.5 text-[9px] font-bold opacity-75';
+          ptsBadge.textContent = tile.points;
+          btn.appendChild(ptsBadge);
+
+          if (tile.gem) {
+            const gemBadge = document.createElement('span');
+            gemBadge.className = 'absolute bottom-1 left-1.5 text-[9px] font-bold uppercase tracking-wider opacity-90';
+            gemBadge.textContent = tile.gem.name[0];
+            btn.appendChild(gemBadge);
+          }
+
+          btn.addEventListener('click', () => {
+            this.selectTile(tile.id);
+          });
+
+          this.dom.letterGrid.appendChild(btn);
+        });
+      }
+
+      handleKeyboardLetter(letter) {
+        const availableTile = this.gridTiles.find(t => !t.isUsed && t.letter === letter);
+        if (availableTile) {
+          this.selectTile(availableTile.id);
+        } else {
+          sound.playTileRemove();
+        }
+      }
+
+      selectTile(tileId) {
+        const tile = this.gridTiles.find(t => t.id === tileId);
+        if (!tile || tile.isUsed) return;
+
+        tile.isUsed = true;
+        this.selectedTileIds.push(tileId);
+
+        sound.playTilePluck(this.selectedTileIds.length);
+
+        this.renderWordBar();
+        this.renderLetterGrid();
+        this.evaluateCurrentWord();
+      }
+
+      backspace() {
+        if (this.selectedTileIds.length === 0) return;
+        const lastTileId = this.selectedTileIds.pop();
+        const tile = this.gridTiles.find(t => t.id === lastTileId);
+        if (tile) {
+          tile.isUsed = false;
+        }
+
+        sound.playTileRemove();
+        this.renderWordBar();
+        this.renderLetterGrid();
+        this.evaluateCurrentWord();
+      }
+
+      clearSelection() {
+        this.selectedTileIds.forEach(id => {
+          const tile = this.gridTiles.find(t => t.id === id);
+          if (tile) tile.isUsed = false;
+        });
+        this.selectedTileIds = [];
+
+        this.renderWordBar();
+        this.renderLetterGrid();
+        this.evaluateCurrentWord();
+      }
+
+      renderWordBar() {
+        this.dom.currentWordSlots.innerHTML = '';
+
+        if (this.selectedTileIds.length === 0) {
+          this.dom.currentWordSlots.innerHTML = `
+            <div class="text-slate-500 font-mono text-xs sm:text-sm italic select-none py-2 px-3">
+              Click letters below or type on your keyboard to construct a programming word...
+            </div>
+          `;
+          return;
+        }
+
+        this.selectedTileIds.forEach((id, index) => {
+          const tile = this.gridTiles.find(t => t.id === id);
+          if (!tile) return;
+
+          const slotBtn = document.createElement('button');
+          slotBtn.className = `word-slot-tile flex items-center justify-center min-w-[38px] h-[44px] sm:min-w-[44px] sm:h-[50px] px-2 rounded-xl font-mono font-bold text-lg sm:text-xl border-2 transition ${tile.gem ? tile.gem.class : 'bg-slate-800 border-cyan-400 text-cyan-200'
+            } hover:brightness-125`;
+          slotBtn.textContent = tile.letter;
+          slotBtn.title = 'Click to return letter';
+
+          slotBtn.addEventListener('click', () => {
+            this.removeTileFromWordBar(index);
+          });
+
+          this.dom.currentWordSlots.appendChild(slotBtn);
+        });
+      }
+
+      removeTileFromWordBar(index) {
+        if (index < 0 || index >= this.selectedTileIds.length) return;
+        const [removedId] = this.selectedTileIds.splice(index, 1);
+        const tile = this.gridTiles.find(t => t.id === removedId);
+        if (tile) tile.isUsed = false;
+
+        sound.playTileRemove();
+        this.renderWordBar();
+        this.renderLetterGrid();
+        this.evaluateCurrentWord();
+      }
+
+      getCurrentWord() {
+        return this.selectedTileIds
+          .map(id => {
+            const tile = this.gridTiles.find(t => t.id === id);
+            return tile ? tile.letter : '';
+          })
+          .join('');
+      }
+
+      evaluateCurrentWord() {
+        const word = this.getCurrentWord();
+        if (word.length === 0) {
+          this.dom.wordEvalPill.classList.add('hidden');
+          return;
+        }
+
+        this.dom.wordEvalPill.classList.remove('hidden');
+
+        const isTarget = word === this.currentQuestion.targetWord;
+        const isBonus = this.currentQuestion.bonusWords.includes(word);
+        const isTech = TECH_WORDS.has(word);
+        const isEnglish = COMMON_WORDS.has(word);
+
+        let basePts = 0;
+        let gemMultiplier = 1;
+        this.selectedTileIds.forEach(id => {
+          const tile = this.gridTiles.find(t => t.id === id);
+          if (tile) {
+            basePts += tile.points;
+            if (tile.gem && tile.gem.type === 'diamond') gemMultiplier *= 3;
+            if (tile.gem && tile.gem.type === 'gold') gemMultiplier *= 2;
+          }
+        });
+
+        const lengthMultiplier = 1 + (word.length - 3) * 0.25;
+
+        if (isTarget) {
+          const totalDmg = Math.round(basePts * 5 * lengthMultiplier * gemMultiplier);
+          this.dom.wordEvalType.innerHTML = '<span class="text-amber-400 font-bold">⭐ TRIVIA SOLUTION!</span>';
+          this.dom.wordEvalPts.textContent = `⚡ ${totalDmg} DMG (5x CRIT)`;
+          this.dom.wordEvalPts.className = 'text-amber-300 font-bold';
+        } else if (isTech || isBonus) {
+          const totalDmg = Math.round(basePts * 2.5 * lengthMultiplier * gemMultiplier);
+          this.dom.wordEvalType.innerHTML = '<span class="text-cyber-neonGreen font-bold">⚡ TECH COMBO!</span>';
+          this.dom.wordEvalPts.textContent = `⚡ ${totalDmg} DMG (2.5x)`;
+          this.dom.wordEvalPts.className = 'text-cyber-neonGreen font-bold';
+        } else if (isEnglish) {
+          const totalDmg = Math.round(basePts * 1.0 * lengthMultiplier * gemMultiplier);
+          this.dom.wordEvalType.innerHTML = '<span class="text-cyan-300">Valid Word</span>';
+          this.dom.wordEvalPts.textContent = `⚡ ${totalDmg} DMG`;
+          this.dom.wordEvalPts.className = 'text-cyan-300 font-bold';
+        } else {
+          this.dom.wordEvalType.innerHTML = '<span class="text-slate-400">Word len: ' + word.length + '</span>';
+          this.dom.wordEvalPts.textContent = 'Checking...';
+          this.dom.wordEvalPts.className = 'text-slate-400';
+        }
+      }
+
+      submitWord() {
+        const word = this.getCurrentWord();
+        if (word.length < 3) {
+          this.triggerInvalidWord('Word must be at least 3 letters!');
+          return;
+        }
+
+        const isTarget = word === this.currentQuestion.targetWord;
+        const isBonus = this.currentQuestion.bonusWords.includes(word);
+        const isTech = TECH_WORDS.has(word);
+        const isEnglish = COMMON_WORDS.has(word);
+
+        if (!isTarget && !isTech && !isBonus && !isEnglish) {
+          this.triggerInvalidWord(`"${word}" is not in dictionary!`);
+          return;
+        }
+
+        // VALID WORD! EXECUTE ATTACK!
+        let basePts = 0;
+        let hasRuby = false;
+        let hasSapphire = false;
+        let hasEmerald = false;
+        let gemMultiplier = 1;
+
+        this.selectedTileIds.forEach(id => {
+          const tile = this.gridTiles.find(t => t.id === id);
+          if (tile) {
+            basePts += tile.points;
+            if (tile.gem) {
+              if (tile.gem.type === 'diamond') gemMultiplier *= 3;
+              if (tile.gem.type === 'gold') gemMultiplier *= 2;
+              if (tile.gem.type === 'ruby') hasRuby = true;
+              if (tile.gem.type === 'sapphire') hasSapphire = true;
+              if (tile.gem.type === 'emerald') hasEmerald = true;
+            }
+          }
+        });
+
+        const lengthMultiplier = 1 + (word.length - 3) * 0.25;
+        let wordTypeMultiplier = 1.0;
+        let bannerText = '';
+
+        if (isTarget) {
+          wordTypeMultiplier = 5.0;
+          bannerText = '⭐ 5x SUPER CRITICAL HIT!';
+        } else if (isTech || isBonus) {
+          wordTypeMultiplier = 2.5;
+          bannerText = '⚡ 2.5x TECH COMBO!';
+        } else {
+          wordTypeMultiplier = 1.0;
+          bannerText = '+ HIT!';
+        }
+
+        const totalDamage = Math.round(basePts * wordTypeMultiplier * lengthMultiplier * gemMultiplier);
+
+        this.executeAttackSequence(totalDamage, isTarget, bannerText, {
+          hasRuby,
+          hasSapphire,
+          hasEmerald,
+          word
+        });
+      }
+
+      triggerInvalidWord(reason) {
+        sound.playInvalidBuzz();
+        this.dom.currentWordSlots.classList.add('shake-error');
+        setTimeout(() => {
+          this.dom.currentWordSlots.classList.remove('shake-error');
+        }, 450);
+
+        this.spawnFloatingText(this.dom.currentWordSlots, reason, 'text-rose-400 font-bold');
+      }
+
+      executeAttackSequence(damage, isTarget, bannerText, effects) {
+        // Hero lunge animation
+        this.dom.heroAvatar.classList.add('hero-attack-lunge');
+        setTimeout(() => this.dom.heroAvatar.classList.remove('hero-attack-lunge'), 350);
+
+        // Sound
+        sound.playAttackBeam(isTarget);
+
+        // Laser FX shooting from Hero straight into Monster!
+        const heroRect = this.dom.heroAvatar.getBoundingClientRect();
+        const monsterRect = this.dom.monsterAvatar.getBoundingClientRect();
+
+        const startX = heroRect.left + heroRect.width / 2;
+        const startY = heroRect.top + heroRect.height / 2;
+        const endX = monsterRect.left + monsterRect.width / 2;
+        const endY = monsterRect.top + monsterRect.height / 2;
+
+        fx.shootLaser(startX, startY, endX, endY, isTarget ? '#ffe600' : '#00f3ff', isTarget);
+
+        // Emerald healing
+        if (effects.hasEmerald) {
+          this.healPlayer(25);
+        }
+
+        // Sapphire freeze
+        if (effects.hasSapphire) {
+          this.bossTurnCountdown += 2;
+          this.spawnFloatingText(this.dom.bossTurnTimer, '❄️ FROZEN +2 MOVES', 'text-cyan-300 font-bold');
+        }
+
+        // Ruby burn
+        if (effects.hasRuby) {
+          this.burnTurnsRemaining += 3;
+          this.spawnFloatingText(this.dom.bossName, '🔥 OVERHEAT BURN!', 'text-amber-400 font-bold');
+        }
+
+        // Apply Monster Damage after laser lands
+        setTimeout(() => {
+          this.bossHp = Math.max(0, this.bossHp - damage);
+          this.score += damage * 10;
+          this.dom.scoreText.textContent = this.score.toLocaleString();
+
+          sound.playMonsterHurt();
+
+          // Monster Hurt Shake & Flash Animation
+          this.dom.monsterAvatar.classList.add('monster-hurt');
+          setTimeout(() => this.dom.monsterAvatar.classList.remove('monster-hurt'), 450);
+
+          // Floating damage text over monster
+          this.spawnFloatingText(
+            this.dom.bossHpBar,
+            `-${damage} DMG! ${bannerText}`,
+            isTarget ? 'text-amber-300 text-lg font-black' : 'text-pink-400 font-bold'
+          );
+
+          this.updateBossHpBar();
+          this.replenishUsedTiles();
+
+          // Check if Monster is Slain!
+          if (this.bossHp <= 0 || isTarget) {
+            // Play Monster Defeat Animation
+            this.dom.monsterAvatar.classList.add('monster-defeat');
+            fx.spawnParticles(endX, endY, 50, ['#ff007f', '#00f3ff', '#ffe600', '#ffffff']);
+
+            setTimeout(() => {
+              this.handleStageVictory(effects.word, damage);
+            }, 750);
+          } else {
+            // Process monster turn
+            this.processBossTurn();
+          }
+        }, 150);
+      }
+
+      processBossTurn() {
+        // Burn damage over time check
+        if (this.burnTurnsRemaining > 0) {
+          this.burnTurnsRemaining--;
+          const burnDmg = 15;
+          this.bossHp = Math.max(0, this.bossHp - burnDmg);
+          this.updateBossHpBar();
+          this.spawnFloatingText(this.dom.bossHpBar, `-${burnDmg} BURN!`, 'text-orange-400 font-bold');
+
+          if (this.bossHp <= 0) {
+            this.dom.monsterAvatar.classList.add('monster-defeat');
+            setTimeout(() => {
+              this.handleStageVictory('BURNOUT', burnDmg);
+            }, 700);
+            return;
+          }
+        }
+
+        // Decrement monster attack countdown
+        this.bossTurnCountdown--;
+        this.updateBossTurnDisplay();
+
+        if (this.bossTurnCountdown <= 0) {
+          // MONSTER ATTACKS HERO!
+          this.monsterAttackPlayer();
+          this.bossTurnCountdown = 3;
+          this.updateBossTurnDisplay();
+        }
+      }
+
+      monsterAttackPlayer() {
+        sound.playMonsterAttack();
+
+        // Monster lunges forward towards hero
+        this.dom.monsterAvatar.classList.add('monster-attack-lunge');
+        setTimeout(() => this.dom.monsterAvatar.classList.remove('monster-attack-lunge'), 400);
+
+        const monsterDmg = Math.floor(Math.random() * 8) + 16;
+
+        setTimeout(() => {
+          this.playerHp = Math.max(0, this.playerHp - monsterDmg);
+          this.updateHeroHpBar();
+
+          // Hero hurt wobble
+          this.dom.heroAvatar.classList.add('hero-hurt');
+          setTimeout(() => this.dom.heroAvatar.classList.remove('hero-hurt'), 400);
+
+          this.spawnFloatingText(
+            this.dom.heroHpBar,
+            `-${monsterDmg} MONSTER STRIKE!`,
+            'text-rose-500 font-black'
+          );
+
+          if (this.playerHp <= 0) {
+            this.handleGameOver();
+          }
+        }, 200);
+      }
+
+      healPlayer(amount) {
+        this.playerHp = Math.min(this.playerMaxHp, this.playerHp + amount);
+        this.updateHeroHpBar();
+        this.spawnFloatingText(this.dom.heroHpBar, `+${amount} HP RESTORED!`, 'text-emerald-400 font-bold');
+      }
+
+      replenishUsedTiles() {
+        this.gridTiles = this.gridTiles.map((tile, i) => {
+          if (tile.isUsed) {
+            const letter = LETTER_POOL[Math.floor(Math.random() * LETTER_POOL.length)];
+            const points = LETTER_POINTS[letter] || 1;
+            let gem = null;
+            if (Math.random() < 0.16) {
+              gem = GEM_TYPES[Math.floor(Math.random() * GEM_TYPES.length)];
+            }
+            return {
+              id: `tile-${i}-${Date.now()}-${Math.random()}`,
+              letter,
+              points,
+              gem,
+              isUsed: false
+            };
+          }
+          return tile;
+        });
+
+        this.selectedTileIds = [];
+        this.renderWordBar();
+        this.renderLetterGrid();
+        this.evaluateCurrentWord();
+      }
+
+      handleStageVictory(winningWord, damageDealt) {
+        sound.playVictoryFanfare();
+        fx.spawnConfetti();
+
+        this.streak++;
+        this.dom.streakText.textContent = this.streak;
+        this.dom.streakFlame.style.opacity = Math.min(1, 0.4 + this.streak * 0.2);
+
+        if (this.streak % 2 === 0) {
+          this.inventory.coffee++;
+          this.inventory.debug++;
+          this.updateInventoryDisplay();
+        }
+
+        // Fill victory modal
+        document.getElementById('victory-monster').textContent = this.currentMonster.name;
+        document.getElementById('victory-answer').textContent = this.currentQuestion.targetWord;
+        document.getElementById('victory-dmg').textContent = `+${damageDealt} DMG (${winningWord})`;
+        document.getElementById('victory-score').textContent = this.score.toLocaleString();
+        document.getElementById('victory-streak').textContent = `🔥 ${this.streak} Stage Streak`;
+
+        setTimeout(() => {
+          this.dom.modalVictory.classList.remove('hidden');
+        }, 500);
+      }
+
+      nextStage() {
+        this.dom.modalVictory.classList.add('hidden');
+        this.loadStage(this.stageIndex + 1);
+      }
+
+      handleGameOver() {
+        document.getElementById('gameover-score').textContent = this.score.toLocaleString();
+        document.getElementById('gameover-stages').textContent = `${this.stageIndex} Stages Completed`;
+        this.dom.modalGameOver.classList.remove('hidden');
+      }
+
+      restartGame() {
+        this.dom.modalGameOver.classList.add('hidden');
+        this.playerHp = 100;
+        this.score = 0;
+        this.streak = 0;
+        this.dom.streakText.textContent = '0';
+        this.dom.scoreText.textContent = '0';
+        this.inventory = { coffee: 2, scramble: 3, debug: 2, burst: 1 };
+        this.loadStage(0);
+      }
+
+      // Consumables Logic
+      useCoffee() {
+        if (this.inventory.coffee <= 0) return;
+        if (this.playerHp >= this.playerMaxHp) {
+          this.spawnFloatingText(this.dom.heroHpBar, 'Already at full health!', 'text-slate-400');
+          return;
+        }
+        this.inventory.coffee--;
+        this.updateInventoryDisplay();
+        sound.playItemUse();
+        this.healPlayer(35);
+      }
+
+      useScramble() {
+        if (this.inventory.scramble <= 0) return;
+        this.inventory.scramble--;
+        this.updateInventoryDisplay();
+        sound.playItemUse();
+
+        this.generateLetterGrid();
+        this.clearSelection();
+        this.spawnFloatingText(this.dom.letterGrid, '⚡ BOARD RE-SCRAMBLED!', 'text-cyan-300 font-bold');
+      }
+
+      useDebugHint() {
+        if (this.inventory.debug <= 0) return;
+        this.inventory.debug--;
+        this.updateInventoryDisplay();
+        sound.playItemUse();
+
+        const availableLetters = this.gridTiles.filter(t => !t.isUsed).map(t => t.letter);
+        const letterCounts = {};
+        availableLetters.forEach(l => {
+          letterCounts[l] = (letterCounts[l] || 0) + 1;
+        });
+
+        const possibleTechWords = [];
+        TECH_WORDS.forEach(word => {
+          if (word.length >= 3 && word.length <= 8) {
+            const wCounts = {};
+            for (const ch of word) {
+              wCounts[ch] = (wCounts[ch] || 0) + 1;
+            }
+            let canForm = true;
+            for (const ch in wCounts) {
+              if (!letterCounts[ch] || letterCounts[ch] < wCounts[ch]) {
+                canForm = false;
+                break;
+              }
+            }
+            if (canForm) {
+              possibleTechWords.push(word);
+            }
+          }
+        });
+
+        possibleTechWords.sort((a, b) => b.length - a.length);
+
+        if (possibleTechWords.length > 0) {
+          const topWords = possibleTechWords.slice(0, 3).join(', ');
+          this.spawnFloatingText(
+            this.dom.currentWordSlots,
+            `🔍 LINTER HINT: Try [ ${topWords} ]!`,
+            'text-purple-300 font-bold text-sm'
+          );
+        } else {
+          this.spawnFloatingText(
+            this.dom.currentWordSlots,
+            `💡 Target Hint: Starts with '${this.currentQuestion.targetWord[0]}'`,
+            'text-amber-300 font-bold'
+          );
+        }
+      }
+
+      useZeroDayBurst() {
+        if (this.inventory.burst <= 0) return;
+        this.inventory.burst--;
+        this.updateInventoryDisplay();
+
+        sound.playAttackBeam(true);
+        const burstDmg = 35;
+        this.bossHp = Math.max(0, this.bossHp - burstDmg);
+        this.updateBossHpBar();
+
+        this.dom.monsterAvatar.classList.add('monster-hurt');
+        setTimeout(() => this.dom.monsterAvatar.classList.remove('monster-hurt'), 400);
+
+        this.spawnFloatingText(this.dom.bossHpBar, `-${burstDmg} ZERO-DAY STRIKE!`, 'text-pink-400 font-black');
+
+        if (this.bossHp <= 0) {
+          this.dom.monsterAvatar.classList.add('monster-defeat');
+          setTimeout(() => {
+            this.handleStageVictory('ZERO-DAY', burstDmg);
+          }, 650);
+        }
+      }
+
+      updateInventoryDisplay() {
+        this.dom.itemCoffeeCount.textContent = this.inventory.coffee;
+        this.dom.itemScrambleCount.textContent = this.inventory.scramble;
+        this.dom.itemDebugCount.textContent = this.inventory.debug;
+        this.dom.itemBurstCount.textContent = this.inventory.burst;
+
+        this.dom.itemCoffee.disabled = this.inventory.coffee <= 0;
+        this.dom.itemScramble.disabled = this.inventory.scramble <= 0;
+        this.dom.itemDebug.disabled = this.inventory.debug <= 0;
+        this.dom.itemBurst.disabled = this.inventory.burst <= 0;
+      }
+
+      updateHeroHpBar() {
+        const pct = Math.max(0, Math.min(100, (this.playerHp / this.playerMaxHp) * 100));
+        this.dom.heroHpBar.style.width = `${pct}%`;
+        this.dom.heroHpText.textContent = `${this.playerHp} / ${this.playerMaxHp}`;
+
+        if (pct < 30) {
+          this.dom.heroHpBar.className = 'h-full bg-gradient-to-r from-red-600 to-rose-500 rounded-full transition-all duration-300';
+        } else {
+          this.dom.heroHpBar.className = 'h-full bg-gradient-to-r from-emerald-500 via-teal-400 to-cyber-neonGreen rounded-full transition-all duration-300 shadow-md shadow-emerald-500/30';
+        }
+      }
+
+      updateBossHpBar() {
+        const pct = Math.max(0, Math.min(100, (this.bossHp / this.bossMaxHp) * 100));
+        this.dom.bossHpBar.style.width = `${pct}%`;
+        this.dom.bossHpText.textContent = `${this.bossHp} / ${this.bossMaxHp} PTS`;
+      }
+
+      updateBossTurnDisplay() {
+        this.dom.bossTurnTimer.textContent = `${this.bossTurnCountdown} ${this.bossTurnCountdown === 1 ? 'move' : 'moves'}`;
+        this.dom.bossTurnPips.innerHTML = '';
+        for (let i = 0; i < 3; i++) {
+          const pip = document.createElement('span');
+          pip.className = `w-1.5 h-1.5 rounded-full transition ${i < this.bossTurnCountdown ? 'bg-cyber-neonYellow' : 'bg-slate-700'
+            }`;
+          this.dom.bossTurnPips.appendChild(pip);
+        }
+      }
+
+      spawnFloatingText(targetEl, text, className = 'text-white font-bold') {
+        const floater = document.createElement('div');
+        floater.className = `absolute z-50 pointer-events-none transition-all duration-700 transform -translate-y-2 font-mono ${className}`;
+        floater.textContent = text;
+        floater.style.left = '50%';
+        floater.style.transform = 'translate(-50%, 0)';
+        floater.style.top = '-20px';
+
+        targetEl.parentElement.style.position = 'relative';
+        targetEl.parentElement.appendChild(floater);
+
+        requestAnimationFrame(() => {
+          floater.style.transform = 'translate(-50%, -36px)';
+          floater.style.opacity = '0';
+        });
+
+        setTimeout(() => {
+          floater.remove();
+        }, 750);
+      }
+    }
+
+    // Initialize Game on DOM Content Loaded
+    let game;
+    window.addEventListener('DOMContentLoaded', () => {
+      game = new GameEngine();
+    });
+  </script>
+</body>
+
+</html>
