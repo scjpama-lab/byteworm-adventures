@@ -1071,7 +1071,7 @@ PI = 4; // TypeError: Assignment to constant</code></pre>
 
   <!-- PLAYER NAME ENTRY SCREEN / START GAME MODAL -->
   <div id="modal-player-entry"
-    class="fixed inset-0 bg-black/90 backdrop-blur-md z-50 flex items-center justify-center p-4">
+    class="fixed inset-0 bg-black/90 backdrop-blur-md z-50 hidden items-center justify-center p-4">
     <div
       class="bg-cyber-surface border-2 border-cyber-neonCyan/70 rounded-2xl max-w-md w-full p-6 sm:p-7 shadow-2xl shadow-cyan-950/60 relative overflow-hidden animate-popIn">
 
@@ -2966,10 +2966,207 @@ PI = 4; // TypeError: Assignment to constant</code></pre>
       }
     }
 
-    // Initialize Game on DOM Content Loaded
+    // =========================================================================
+    // PLAYER NAME ENTRY & ADMIN LEADERBOARD SYSTEM
+    // =========================================================================
+    const LEADERBOARD_KEY = 'byteworm_adventures_leaderboard';
+    const RANDOM_HANDLES = [
+      'NeoCoder', 'ByteKnight', 'HexWitch', 'NullSlayer', 'VoidHunter',
+      'StackSage', 'BitCracker', 'SyntaxSlayer', 'RootWarden', 'CryptoFox',
+      'PatchMaster', 'CoreDrifter', 'LoopBreaker', 'RegexRobot', 'KernelGhost',
+      'DataWraith', 'CacheHunter', 'TokenRider', 'ShadowNode', 'AlphaDebug'
+    ];
+
+    function loadLeaderboard() {
+      try { return JSON.parse(localStorage.getItem(LEADERBOARD_KEY) || '[]'); }
+      catch (e) { return []; }
+    }
+
+    function saveLeaderboard(records) {
+      try { localStorage.setItem(LEADERBOARD_KEY, JSON.stringify(records)); } catch (e) { }
+    }
+
+    function addLeaderboardRecord(entry) {
+      const records = loadLeaderboard();
+      records.unshift(entry);
+      saveLeaderboard(records.slice(0, 200)); // cap at 200 entries
+    }
+
+    // =========================================================================
+    // ADMIN LEADERBOARD MODAL RENDERER
+    // =========================================================================
+    let adminSortKey = 'score';
+    let adminSortDir = -1;
+    let adminFilter = '';
+
+    function renderAdminModal() {
+      const records = loadLeaderboard();
+      const filtered = records.filter(r =>
+        !adminFilter || (r.player || '').toLowerCase().includes(adminFilter.toLowerCase())
+      );
+      const sorted = [...filtered].sort((a, b) => {
+        const av = a[adminSortKey] ?? 0;
+        const bv = b[adminSortKey] ?? 0;
+        if (typeof av === 'string') return adminSortDir * av.localeCompare(bv);
+        return adminSortDir * (av - bv);
+      });
+
+      // KPI cards
+      const totalSessions = records.length;
+      const highScore = records.reduce((mx, r) => Math.max(mx, r.score || 0), 0);
+      const totalMonsters = records.reduce((s, r) => s + (r.monsters || 0), 0);
+      const totalTrivia = records.reduce((s, r) => s + (r.trivia || 0), 0);
+
+      document.getElementById('admin-kpi-sessions').textContent = totalSessions;
+      document.getElementById('admin-kpi-highscore').textContent = highScore.toLocaleString();
+      document.getElementById('admin-kpi-monsters').textContent = totalMonsters;
+      document.getElementById('admin-kpi-trivia').textContent = totalTrivia;
+
+      const tbody = document.getElementById('admin-table-body');
+      if (sorted.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="7" class="text-center py-10 text-slate-500 font-mono">No records yet. Play a game to get on the board!</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = sorted.map((r, i) => {
+        const date = r.date ? new Date(r.date).toLocaleString() : '—';
+        const statusColor = r.status === 'VICTORY' ? 'text-cyber-neonGreen' : r.status === 'FATAL CRASH' ? 'text-red-400' : 'text-slate-400';
+        const medal = i === 0 && adminSortKey === 'score' && adminSortDir === -1 ? '🥇 ' : (i === 1 ? '🥈 ' : i === 2 ? '🥉 ' : '');
+        return `<tr class="border-t border-slate-800/60 hover:bg-slate-800/40 transition">
+          <td class="py-2 px-3 font-bold font-mono text-cyber-neonCyan">${medal}${r.player || 'Anonymous'}</td>
+          <td class="py-2 px-3 text-right font-mono text-cyber-neonYellow font-bold">${(r.score || 0).toLocaleString()}</td>
+          <td class="py-2 px-3 text-right font-mono text-slate-300">${r.monsters || 0}</td>
+          <td class="py-2 px-3 text-right font-mono text-slate-300">${r.trivia || 0}</td>
+          <td class="py-2 px-3 text-center font-mono text-slate-400">${r.stage || 1}</td>
+          <td class="py-2 px-3 text-center font-mono font-bold ${statusColor}">${r.status || '—'}</td>
+          <td class="py-2 px-3 text-right font-mono text-slate-500 text-xs">${date}</td>
+        </tr>`;
+      }).join('');
+    }
+
+    function showAdminModal(fromGame) {
+      renderAdminModal();
+      const modal = document.getElementById('modal-admin');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+      // Store context — if shown from player entry screen, close should go back there
+      modal._fromPlayerEntry = !!fromGame;
+    }
+
+    function hideAdminModal() {
+      const modal = document.getElementById('modal-admin');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    function showPlayerEntryModal() {
+      const modal = document.getElementById('modal-player-entry');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+      setTimeout(() => document.getElementById('player-name-input').focus(), 100);
+    }
+
+    function hidePlayerEntryModal() {
+      const modal = document.getElementById('modal-player-entry');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    // =========================================================================
+    // INITIALIZE GAME ON DOM CONTENT LOADED
+    // =========================================================================
     let game;
     window.addEventListener('DOMContentLoaded', () => {
-      game = new GameEngine();
+
+      // --- Player Entry Modal Logic ---
+      showPlayerEntryModal();
+
+      // Random handle generator
+      document.getElementById('btn-random-name').addEventListener('click', () => {
+        const h = RANDOM_HANDLES[Math.floor(Math.random() * RANDOM_HANDLES.length)];
+        document.getElementById('player-name-input').value = h;
+        document.getElementById('player-name-input').focus();
+      });
+
+      // Preset name buttons
+      document.querySelectorAll('.preset-name-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.getElementById('player-name-input').value = btn.textContent.trim();
+          document.getElementById('player-name-input').focus();
+        });
+      });
+
+      // Start game form submit
+      document.getElementById('btn-start-game').addEventListener('click', () => {
+        const raw = document.getElementById('player-name-input').value.trim();
+        const playerName = raw || RANDOM_HANDLES[Math.floor(Math.random() * RANDOM_HANDLES.length)];
+        hidePlayerEntryModal();
+        game = new GameEngine(playerName);
+      });
+
+      // Also allow Enter key inside the form
+      document.getElementById('form-player-entry').addEventListener('submit', (e) => {
+        e.preventDefault();
+        document.getElementById('btn-start-game').click();
+      });
+
+      // View leaderboard from start screen
+      document.getElementById('btn-view-leaderboard-start').addEventListener('click', () => {
+        showAdminModal(false);
+      });
+
+      // --- Admin Modal Logic ---
+      // Close buttons
+      ['btn-close-admin', 'btn-close-admin-bottom'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.addEventListener('click', () => {
+          hideAdminModal();
+          if (!game) showPlayerEntryModal();
+        });
+      });
+
+      // Search input
+      document.getElementById('admin-search-input').addEventListener('input', (e) => {
+        adminFilter = e.target.value;
+        renderAdminModal();
+      });
+
+      // Sort headers
+      document.querySelectorAll('[data-sort]').forEach(th => {
+        th.style.cursor = 'pointer';
+        th.addEventListener('click', () => {
+          const key = th.dataset.sort;
+          if (adminSortKey === key) adminSortDir *= -1;
+          else { adminSortKey = key; adminSortDir = -1; }
+          renderAdminModal();
+        });
+      });
+
+      // Clear history
+      document.getElementById('btn-clear-history').addEventListener('click', () => {
+        if (confirm('⚠️ Clear ALL session records from local storage? This cannot be undone.')) {
+          saveLeaderboard([]);
+          renderAdminModal();
+        }
+      });
+
+      // Export JSON
+      document.getElementById('btn-export-json').addEventListener('click', () => {
+        const records = loadLeaderboard();
+        const blob = new Blob([JSON.stringify(records, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'byteworm_leaderboard.json';
+        a.click();
+        URL.revokeObjectURL(url);
+      });
+
+      // Switch / New coder button
+      document.getElementById('btn-new-player-session').addEventListener('click', () => {
+        hideAdminModal();
+        showPlayerEntryModal();
+      });
     });
   </script>
 </body>
