@@ -681,47 +681,88 @@
           <!-- Quiz Header -->
           <div class="flex items-center justify-between gap-2 mb-2 pb-2 border-b border-slate-800">
             <span id="question-category"
-              class="text-[11px] font-mono px-2 py-0.5 rounded bg-cyan-950/80 text-cyan-300 border border-cyan-800/50 font-bold">
-              [ JavaScript Fundamentals ]
+              class="text-[11px] font-mono px-2 py-0.5 rounded bg-cyan-950/80 text-cyan-300 border border-cyan-800/50 font-bold truncate max-w-[160px] sm:max-w-none">
+              [ Algorithm Objective ]
             </span>
-            <div class="text-[11px] font-mono text-slate-400 flex items-center gap-2">
-              <span id="question-clue-badge" class="text-amber-300 flex items-center gap-1 font-semibold">
-                <span>💡 Clue:</span>
-                <span id="target-word-hint" class="font-bold tracking-wider underline">_ _ _ _ _</span>
+            <div class="flex items-center gap-1.5 sm:gap-2 flex-shrink-0">
+              <span id="question-progress-badge"
+                class="text-[11px] font-mono px-2 py-0.5 rounded bg-purple-950/80 text-cyber-neonPurple border border-purple-800/50 font-bold">
+                Q 1 / 15
+              </span>
+              <span id="quiz-score-badge"
+                class="text-[11px] font-mono px-2 py-0.5 rounded bg-amber-950/80 text-cyber-neonYellow border border-amber-800/50 font-bold">
+                ⭐ 0 / 15 PTS
               </span>
             </div>
           </div>
 
           <!-- Question Prompt -->
-          <p id="question-prompt" class="text-xs sm:text-sm font-semibold text-slate-100 mb-2 leading-relaxed">
-            Which keyword declares a block-scoped variable that cannot be reassigned?
+          <p id="question-prompt"
+            class="text-xs sm:text-sm font-semibold text-slate-100 mb-2 leading-relaxed font-sans">
+            What is the main objective of the Selection Sort algorithm?
           </p>
 
           <!-- Interactive Code Sandbox Snippet -->
-          <div
-            class="bg-[#0b0f19] border border-slate-800 rounded-xl p-2.5 sm:p-3 font-mono text-xs sm:text-sm text-cyan-300 overflow-x-auto shadow-inner relative group">
+          <div id="question-snippet-box"
+            class="bg-[#0b0f19] border border-slate-800 rounded-xl p-2.5 sm:p-3 font-mono text-xs text-cyan-300 overflow-x-auto shadow-inner relative group mb-2.5">
             <div
               class="flex items-center justify-between text-[10px] text-slate-500 mb-1 border-b border-slate-800/50 pb-1">
-              <span>code_sandbox.js</span>
+              <span>selection_sort.py</span>
               <span class="text-emerald-400 font-bold flex items-center gap-1">
                 <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span>
-                RUNTIME ACTIVE
+                ACTIVE QUIZ PASS
               </span>
             </div>
-            <pre id="question-snippet" class="text-slate-300 font-mono whitespace-pre-wrap"><code class="text-slate-300">_____ PI = 3.14159;
-PI = 4; // TypeError: Assignment to constant</code></pre>
+            <pre id="question-snippet"
+              class="text-slate-300 font-mono whitespace-pre-wrap"><code class="text-slate-300"># Selection sort trace</code></pre>
+          </div>
+
+          <!-- MULTIPLE-CHOICE OPTIONS (A, B, C, D) -->
+          <div class="space-y-1.5 sm:space-y-2 mb-2" id="mc-options-container">
+            <button type="button" data-option="A"
+              class="mc-option-btn w-full p-2.5 rounded-xl bg-slate-900/90 hover:bg-slate-800 border-2 border-slate-800 hover:border-cyber-neonCyan transition flex items-start gap-2.5 text-left group">
+              <span
+                class="mc-letter-badge w-6 h-6 rounded-lg bg-slate-800 group-hover:bg-cyan-500/20 text-cyber-neonCyan font-mono font-bold text-xs flex items-center justify-center flex-shrink-0 border border-slate-700">A</span>
+              <span class="mc-option-text text-xs sm:text-sm font-mono text-slate-200 leading-snug flex-1">Option
+                A</span>
+              <span class="mc-feedback-icon text-xs hidden font-bold font-mono"></span>
+            </button>
+            <button type="button" data-option="B"
+              class="mc-option-btn w-full p-2.5 rounded-xl bg-slate-900/90 hover:bg-slate-800 border-2 border-slate-800 hover:border-cyber-neonCyan transition flex items-start gap-2.5 text-left group">
+              <span
+                class="mc-letter-badge w-6 h-6 rounded-lg bg-slate-800 group-hover:bg-cyan-500/20 text-cyber-neonCyan font-mono font-bold text-xs flex items-center justify-center flex-shrink-0 border border-slate-700">B</span>
+              <span class="mc-option-text text-xs sm:text-sm font-mono text-slate-200 leading-snug flex-1">Option
+                B</span>
+              <span class="mc-feedback-icon text-xs hidden font-bold font-mono"></span>
+            </button>
+            <button type="button" data-option="C"
+              class="mc-option-btn w-full p-2.5 rounded-xl bg-slate-900/90 hover:bg-slate-800 border-2 border-slate-800 hover:border-cyber-neonCyan transition flex items-start gap-2.5 text-left group">
+              <span
+                class="mc-letter-badge w-6 h-6 rounded-lg bg-slate-800 group-hover:bg-cyan-500/20 text-cyber-neonCyan font-mono font-bold text-xs flex items-center justify-center flex-shrink-0 border border-slate-700">C</span>
+              <span class="mc-option-text text-xs sm:text-sm font-mono text-slate-200 leading-snug flex-1">Option
+                C</span>
+              <span class="mc-feedback-icon text-xs hidden font-bold font-mono"></span>
+            </button>
+            <button type="button" data-option="D"
+              class="mc-option-btn w-full p-2.5 rounded-xl bg-slate-900/90 hover:bg-slate-800 border-2 border-slate-800 hover:border-cyber-neonCyan transition flex items-start gap-2.5 text-left group">
+              <span
+                class="mc-letter-badge w-6 h-6 rounded-lg bg-slate-800 group-hover:bg-cyan-500/20 text-cyber-neonCyan font-mono font-bold text-xs flex items-center justify-center flex-shrink-0 border border-slate-700">D</span>
+              <span class="mc-option-text text-xs sm:text-sm font-mono text-slate-200 leading-snug flex-1">Option
+                D</span>
+              <span class="mc-feedback-icon text-xs hidden font-bold font-mono"></span>
+            </button>
           </div>
         </div>
 
-        <!-- Clue / Multiplier Legend Box -->
+        <!-- Clue / Bonus Word Bar -->
         <div
-          class="mt-2.5 flex flex-wrap items-center justify-between gap-2 text-[11px] font-mono bg-slate-950/70 px-3 py-2 rounded-xl border border-slate-800">
+          class="flex flex-wrap items-center justify-between gap-2 text-[11px] font-mono bg-slate-950/70 px-3 py-1.5 rounded-xl border border-slate-800 mt-1">
           <div class="flex items-center gap-1.5 text-slate-300">
-            <span class="text-amber-400">⭐ Hint:</span>
-            <span id="question-clue-text" class="text-slate-300">5 letters • Immutable variable keyword</span>
+            <span class="text-amber-400">💡 Bonus Tile Word:</span>
+            <span id="target-word-hint" class="font-bold text-cyan-300 underline tracking-wider">SORT</span>
           </div>
           <div class="text-cyber-neonGreen font-semibold">
-            <span>Solution = <b class="text-amber-300">5x CRIT HIT!</b></span>
+            <span>Tile Word = <b class="text-amber-300">+Extra Attack DMG</b></span>
           </div>
         </div>
 
@@ -959,6 +1000,83 @@ PI = 4; // TypeError: Assignment to constant</code></pre>
     </div>
   </div>
 
+  <!-- GRAND VICTORY MODAL (AFTER QUESTION 15 / ALL MONSTERS CLEARED) -->
+  <div id="modal-grand-victory"
+    class="fixed inset-0 bg-black/90 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+    <div
+      class="bg-cyber-surface border-2 border-cyber-neonGreen rounded-2xl max-w-lg w-full p-6 sm:p-7 shadow-2xl shadow-emerald-950/70 text-center space-y-4 animate-popIn relative overflow-hidden">
+      <!-- Glow ambient -->
+      <div class="absolute -top-16 -right-16 w-44 h-44 bg-cyber-neonGreen/20 rounded-full blur-3xl pointer-events-none">
+      </div>
+      <div
+        class="absolute -bottom-16 -left-16 w-44 h-44 bg-cyber-neonCyan/20 rounded-full blur-3xl pointer-events-none">
+      </div>
+
+      <div class="text-6xl animate-bounce">🏆</div>
+
+      <div>
+        <h3
+          class="text-xl sm:text-2xl font-black font-arcade text-transparent bg-clip-text bg-gradient-to-r from-cyber-neonGreen via-cyber-neonCyan to-cyber-neonYellow uppercase tracking-wider">
+          CHALLENGE CRUSHED!
+        </h3>
+        <h4 class="text-base sm:text-lg font-bold text-slate-100 font-mono mt-1">
+          Congratulations, <span id="grand-victory-player" class="text-cyber-neonGreen font-extrabold underline">Lex The
+            Hacker</span>!
+        </h4>
+        <p class="text-xs sm:text-sm text-cyan-300 font-mono mt-0.5">
+          You crushed the Selection Sort Challenge!
+        </p>
+      </div>
+
+      <!-- Score Box -->
+      <div
+        class="bg-slate-950/90 p-4 sm:p-5 rounded-2xl border-2 border-cyber-neonYellow/60 text-center font-mono shadow-inner shadow-amber-500/10 space-y-1">
+        <span class="text-[11px] text-slate-400 uppercase tracking-widest block font-bold">Official Selection Sort
+          Score</span>
+        <div class="text-3xl sm:text-4xl font-black text-cyber-neonYellow font-arcade tracking-wide py-1">
+          Final Score: <span id="grand-victory-score">15</span> / 15 Points
+        </div>
+        <div id="grand-victory-badge"
+          class="inline-block px-3 py-1 rounded-full text-xs font-bold font-mono bg-amber-500/20 text-amber-300 border border-amber-500/40">
+          🏆 GRAND ALGORITHM MASTER
+        </div>
+      </div>
+
+      <!-- Stats Grid -->
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-left font-mono text-xs">
+        <div class="bg-slate-900/80 p-2.5 rounded-xl border border-slate-800">
+          <span class="text-[10px] text-slate-400 block uppercase">Accuracy</span>
+          <span id="grand-victory-pct" class="text-sm font-bold text-cyber-neonCyan">100%</span>
+        </div>
+        <div class="bg-slate-900/80 p-2.5 rounded-xl border border-slate-800">
+          <span class="text-[10px] text-slate-400 block uppercase">Monsters Slain</span>
+          <span id="grand-victory-monsters" class="text-sm font-bold text-cyber-neonPink">5 / 5</span>
+        </div>
+        <div class="bg-slate-900/80 p-2.5 rounded-xl border border-slate-800">
+          <span class="text-[10px] text-slate-400 block uppercase">Tile Words</span>
+          <span id="grand-victory-words" class="text-sm font-bold text-cyber-neonGreen">0</span>
+        </div>
+        <div class="bg-slate-900/80 p-2.5 rounded-xl border border-slate-800">
+          <span class="text-[10px] text-slate-400 block uppercase">Streak</span>
+          <span id="grand-victory-streak" class="text-sm font-bold text-cyber-neonYellow">0 🔥</span>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="pt-2 space-y-2 font-mono">
+        <button id="btn-grand-victory-restart"
+          class="w-full py-3 bg-gradient-to-r from-cyber-neonCyan via-teal-400 to-cyber-neonGreen hover:from-cyan-300 hover:to-emerald-300 text-slate-950 font-black text-sm rounded-xl shadow-lg shadow-cyan-500/25 transition transform hover:scale-[1.01] active:scale-[0.99] flex items-center justify-center gap-2">
+          <span>⚡ PLAY AGAIN</span>
+        </button>
+        <button id="btn-grand-victory-admin"
+          class="w-full py-2 bg-slate-900/90 hover:bg-slate-800 text-cyber-neonPurple hover:text-purple-300 border border-cyber-neonPurple/50 rounded-xl text-xs transition flex items-center justify-center gap-2">
+          <span>📊 View Performance Leaderboard</span>
+        </button>
+      </div>
+
+    </div>
+  </div>
+
   <!-- VICTORY / STAGE CLEAR MODAL -->
   <div id="modal-victory"
     class="fixed inset-0 bg-black/85 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
@@ -1013,6 +1131,85 @@ PI = 4; // TypeError: Assignment to constant</code></pre>
         <button id="btn-victory-admin"
           class="w-full py-2 bg-slate-900/90 hover:bg-slate-800 text-cyber-neonPurple hover:text-purple-300 border border-cyber-neonPurple/40 rounded-xl font-mono text-xs transition flex items-center justify-center gap-2">
           <span>📊 View Admin Leaderboard</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- GRAND VICTORY MODAL (COMPLETING ALL 15 SELECTION SORT CHALLENGES) -->
+  <div id="modal-grand-victory"
+    class="fixed inset-0 bg-black/90 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+    <div
+      class="bg-cyber-surface border-2 border-cyber-neonYellow/70 rounded-2xl max-w-lg w-full p-6 sm:p-7 shadow-2xl shadow-amber-950/60 text-center space-y-4 animate-popIn relative overflow-hidden">
+      <!-- Ambient Glows -->
+      <div
+        class="absolute -top-16 -right-16 w-44 h-44 bg-cyber-neonYellow/20 rounded-full blur-3xl pointer-events-none">
+      </div>
+      <div
+        class="absolute -bottom-16 -left-16 w-44 h-44 bg-cyber-neonGreen/20 rounded-full blur-3xl pointer-events-none">
+      </div>
+
+      <div class="text-6xl animate-bounce">👑</div>
+      <div>
+        <h2 id="grand-victory-title"
+          class="text-xl sm:text-2xl font-black font-arcade text-transparent bg-clip-text bg-gradient-to-r from-cyber-neonYellow via-white to-cyber-neonGreen uppercase tracking-wider">
+          CHALLENGE COMPLETE!
+        </h2>
+        <p id="grand-victory-greeting" class="text-sm font-mono text-cyan-300 font-bold mt-2">
+          Congratulations, <span id="grand-victory-player">Lex</span>! You crushed the Selection Sort Challenge!
+        </p>
+      </div>
+
+      <!-- Score Box -->
+      <div
+        class="bg-slate-950/90 p-5 rounded-2xl border border-amber-500/40 font-mono space-y-3 text-left shadow-inner">
+        <div class="text-center pb-2 border-b border-slate-800">
+          <span class="text-xs text-slate-400 uppercase tracking-widest block mb-1">Final Verified Quiz Score</span>
+          <div id="grand-victory-score-display"
+            class="text-2xl sm:text-3xl font-black font-arcade text-cyber-neonYellow">
+            Final Score: <span id="grand-victory-score">15</span> / 15 Points
+          </div>
+          <span id="grand-victory-rating"
+            class="inline-block mt-2 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-emerald-500/20 text-cyber-neonGreen border border-emerald-500/30">
+            ⭐ Master of Selection Sort ⭐
+          </span>
+        </div>
+
+        <div class="grid grid-cols-2 gap-2 pt-1 text-xs">
+          <div class="flex justify-between p-2 rounded-lg bg-slate-900/80 border border-slate-800">
+            <span class="text-slate-400">Questions:</span>
+            <span class="text-white font-bold">15 / 15</span>
+          </div>
+          <div class="flex justify-between p-2 rounded-lg bg-slate-900/80 border border-slate-800">
+            <span class="text-slate-400">Monsters Slain:</span>
+            <span id="grand-victory-monsters" class="text-cyber-neonPink font-bold">5 Defeated</span>
+          </div>
+          <div class="flex justify-between p-2 rounded-lg bg-slate-900/80 border border-slate-800">
+            <span class="text-slate-400">Algorithm:</span>
+            <span class="text-cyber-neonCyan font-bold">Selection Sort</span>
+          </div>
+          <div class="flex justify-between p-2 rounded-lg bg-slate-900/80 border border-slate-800">
+            <span class="text-slate-400">Time Complexity:</span>
+            <span class="text-cyber-neonYellow font-bold">O(n²)</span>
+          </div>
+        </div>
+
+        <div
+          class="pt-2 border-t border-slate-800 text-[11px] text-emerald-400 font-mono flex items-center justify-center gap-1.5">
+          <span>✓</span>
+          <span>Final record certified and saved to Local Leaderboard</span>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="space-y-2 pt-2">
+        <button id="btn-grand-victory-restart" type="button"
+          class="w-full py-3.5 bg-gradient-to-r from-cyber-neonYellow via-amber-400 to-cyber-neonGreen hover:from-yellow-300 hover:to-emerald-300 text-slate-950 font-black font-mono text-sm rounded-xl shadow-lg shadow-amber-500/25 transition-all transform hover:scale-[1.01] active:scale-[0.99] flex items-center justify-center gap-2">
+          <span>🎮 PLAY AGAIN</span>
+        </button>
+        <button id="btn-grand-victory-admin" type="button"
+          class="w-full py-2.5 bg-slate-900/90 hover:bg-slate-800 text-cyber-neonPurple hover:text-purple-300 border border-cyber-neonPurple/50 rounded-xl font-mono text-xs transition flex items-center justify-center gap-2">
+          <span>📊 View Performance Leaderboard</span>
         </button>
       </div>
     </div>
@@ -1135,7 +1332,7 @@ PI = 4; // TypeError: Assignment to constant</code></pre>
 
         <!-- Action Buttons -->
         <div class="pt-2 space-y-2">
-          <button id="btn-start-game" type="submit"
+          <button id="btn-start-game" type="button"
             class="w-full py-3 bg-gradient-to-r from-cyber-neonCyan via-teal-400 to-cyber-neonGreen hover:from-cyan-300 hover:to-emerald-300 text-slate-950 font-black font-mono text-sm rounded-xl shadow-lg shadow-cyan-500/25 transition-all transform hover:scale-[1.01] active:scale-[0.99] flex items-center justify-center gap-2">
             <span>⚡ INITIALIZE COMPILER & BATTLE</span>
             <span class="text-xs opacity-75">[Enter]</span>
@@ -1379,6 +1576,42 @@ PI = 4; // TypeError: Assignment to constant</code></pre>
         gain.connect(this.ctx.destination);
         osc.start();
         osc.stop(this.ctx.currentTime + 0.28);
+      }
+
+      playQuizCorrect() {
+        if (this.muted) return;
+        this.init();
+        if (!this.ctx) return;
+        const notes = [523.25, 659.25, 783.99, 1046.50]; // C5, E5, G5, C6 triumphant chime
+        notes.forEach((freq, idx) => {
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(freq, this.ctx.currentTime + idx * 0.06);
+          gain.gain.setValueAtTime(0.12, this.ctx.currentTime + idx * 0.06);
+          gain.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + idx * 0.06 + 0.22);
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+          osc.start(this.ctx.currentTime + idx * 0.06);
+          osc.stop(this.ctx.currentTime + idx * 0.06 + 0.24);
+        });
+      }
+
+      playQuizWrong() {
+        if (this.muted) return;
+        this.init();
+        if (!this.ctx) return;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(120, this.ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(70, this.ctx.currentTime + 0.3);
+        gain.gain.setValueAtTime(0.18, this.ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.32);
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start();
+        osc.stop(this.ctx.currentTime + 0.35);
       }
 
       playAttackBeam(isCritical = false) {
@@ -1840,7 +2073,8 @@ PI = 4; // TypeError: Assignment to constant</code></pre>
       "EXPORT", "DEFAULT", "MODULE", "BUNDLE", "NPM", "YARN", "PNPM", "CARGO", "PIP", "GRADLE", "MAVEN",
       "ASSERT", "CATCH", "FINALLY", "SWITCH", "DEFAULT", "CONTINUE", "DEF", "ELIF", "PASS", "WITH", "AS",
       "LAMBDA", "GLOBAL", "NONLOCAL", "DEL", "RAISE", "EXCEPT", "IS", "IN", "NOT", "AND", "OR", "XOR", "NAND",
-      "NOR", "MODULO", "DIV", "MUL", "SUB", "ADD", "SHL", "SHR", "INCREMENT", "DECREMENT", "OPERATOR", "CAST"
+      "NOR", "MODULO", "DIV", "MUL", "SUB", "ADD", "SHL", "SHR", "INCREMENT", "DECREMENT", "OPERATOR", "CAST",
+      "SWAP", "MIN", "MAX", "SUM", "EIGHT", "GROW", "SAME", "SPACE"
     ]);
 
     // Common English Words (3 to 8 letters)
@@ -1935,129 +2169,281 @@ PI = 4; // TypeError: Assignment to constant</code></pre>
       "WOUND", "WRITE", "WRONG", "WROTE", "YIELD", "YOUNG", "YOUTH"
     ]);
 
-    // 5. RICH PROGRAMMING QUIZ DATABASE WITH ASSIGNED MONSTERS
-    const QUIZ_QUESTIONS = [
+    // 5. OFFICIAL SELECTION SORT MULTIPLE-CHOICE QUESTION BANK (15 CHALLENGES)
+    const SELECTION_SORT_QUESTIONS = [
       {
         id: 1,
         stageLabel: "Stage 1-1",
-        monsterType: 'spider',
-        category: "JavaScript Basics",
-        prompt: "Which keyword declares a block-scoped variable that cannot be reassigned after initialization?",
-        snippet: "_____ PI = 3.14159;\nPI = 4; // TypeError: Assignment to constant variable",
-        targetWord: "CONST",
-        clue: "5 letters • Starts with C • Constant identifier",
-        bonusWords: ["VAR", "LET", "MUTATE", "ASSIGN", "TYPE", "SCOPE"],
-        hp: 75
+        monsterType: 'slime',
+        category: "Algorithm Objective",
+        prompt: "What is the main objective of the Selection Sort algorithm?",
+        snippet: "# Selection Sort Objective\ndef selection_sort(arr):\n    # Goal: repeatedly select minimum element from unsorted portion",
+        options: {
+          A: "Split the array into smaller sub-arrays",
+          B: "Put a list in order by repeatedly finding and selecting the smallest item",
+          C: "Search for a specific target element in a list",
+          D: "Swap adjacent elements if they are in the wrong order"
+        },
+        correct: "B",
+        targetWord: "SORT",
+        explanation: "Selection Sort orders a list by repeatedly finding the smallest element from the unsorted segment and placing it at the front.",
+        hp: 90
       },
       {
         id: 2,
         stageLabel: "Stage 1-2",
         monsterType: 'slime',
-        category: "Data Structures",
-        prompt: "Which Last-In, First-Out (LIFO) data structure is used to manage function call execution frames?",
-        snippet: "function recurse(n) {\n  if (n <= 0) return;\n  recurse(n - 1); // Pushing frame to _____\n}",
-        targetWord: "STACK",
-        clue: "5 letters • Rhymes with PACK • Overflows on infinite recursion",
-        bonusWords: ["QUEUE", "HEAP", "FRAME", "PUSH", "POP", "CALL", "NODE"],
-        hp: 85
+        category: "Conceptual Partitioning",
+        prompt: "How is the list divided during Selection Sort?",
+        snippet: "# Conceptual Layout of Array During Pass k:\n# [ Sorted Partition (Grows Left) | Unsorted Partition (Shrinks Right) ]\n[ 11, 12, 22 | 64, 25 ]",
+        options: {
+          A: "Into left half and right half recursively",
+          B: "Into even indices and odd indices",
+          C: "A sorted part that grows from the left, and an unsorted part that shrinks on the right",
+          D: "Around a randomly chosen pivot element"
+        },
+        correct: "C",
+        targetWord: "LIST",
+        explanation: "The sorted sublist starts empty on the left and expands by 1 element each pass, while the unsorted portion shrinks from the right.",
+        hp: 90
       },
       {
         id: 3,
         stageLabel: "Stage 1-3",
-        monsterType: 'phantom',
-        category: "Asynchronous JS",
-        prompt: "What object represents the eventual completion or failure of an asynchronous operation?",
-        snippet: "function loadUser() {\n  return new _____((resolve, reject) => {\n    fetch('/api').then(resolve);\n  });\n}",
-        targetWord: "PROMISE",
-        clue: "7 letters • Has .then() and .catch() methods",
-        bonusWords: ["ASYNC", "AWAIT", "THEN", "CATCH", "RESOLVE", "REJECT", "FETCH"],
-        hp: 95
+        monsterType: 'slime',
+        category: "Core Pass Steps",
+        prompt: "What are the three core steps of a Selection Sort pass?",
+        snippet: "# Selection Sort Pass Workflow:\n1. SCAN: find minimum in unsorted segment\n2. SWAP: move minimum to first spot of unsorted\n3. REPEAT: advance boundary to next index",
+        options: {
+          A: "Push, Pop, and Peek",
+          B: "Divide, Conquer, and Combine",
+          C: "Scan, Swap, and Repeat",
+          D: "Compare, Shift right, and Insert"
+        },
+        correct: "C",
+        targetWord: "SCAN",
+        explanation: "Every pass scans the unsorted elements to discover the minimum, swaps it into position, and repeats on the remaining unsorted array.",
+        hp: 90
       },
       {
         id: 4,
         stageLabel: "Stage 2-1",
         monsterType: 'spider',
-        category: "Array Methods",
-        prompt: "Which array method removes the LAST element from an array and returns that element?",
-        snippet: "const items = ['a', 'b', 'c'];\nconst last = items._____(); // returns 'c', length is now 2",
-        targetWord: "POP",
-        clue: "3 letters • Pairs with PUSH in stack operations",
-        bonusWords: ["PUSH", "SHIFT", "SLICE", "SPLICE", "ARRAY", "FIND", "MAP"],
-        hp: 80
+        category: "Algorithm Tracing",
+        prompt: "Given [64, 25, 12, 22, 11], what is the list after Pass 1?",
+        snippet: "Initial Array: [64, 25, 12, 22, 11]\nUnsorted range: index 0 to 4\nSmallest found: 11 (at index 4)\nAction: Swap arr[0] (64) with arr[4] (11)\nAfter Pass 1: [ ??, ??, ??, ??, ?? ]",
+        options: {
+          A: "[25, 64, 12, 22, 11]",
+          B: "[11, 25, 12, 22, 64]",
+          C: "[11, 12, 22, 25, 64]",
+          D: "[64, 25, 12, 22, 11]"
+        },
+        correct: "B",
+        targetWord: "PASS",
+        explanation: "The minimum in [64, 25, 12, 22, 11] is 11. It swaps with 64 at index 0, yielding [11, 25, 12, 22, 64].",
+        hp: 90
       },
       {
         id: 5,
         stageLabel: "Stage 2-2",
-        monsterType: 'kraken',
-        category: "Git & Version Control",
-        prompt: "Which Git command incorporates changes from the named branch into the current checked-out branch?",
-        snippet: "git checkout main\ngit _____ feature-auth\n// Combines feature-auth commits into main",
-        targetWord: "MERGE",
-        clue: "5 letters • Starts with M • Can produce merge conflicts",
-        bonusWords: ["BRANCH", "COMMIT", "PULL", "PUSH", "REBASE", "STASH", "CLONE", "DIFF"],
-        hp: 95
+        monsterType: 'spider',
+        category: "Comparison Analysis",
+        prompt: "During Pass 1 of an array of size n, how many element comparisons are made to locate the minimum?",
+        snippet: "min_pos = 0\nfor j in range(1, n): # Comparing arr[j] < arr[min_pos]\n    # How many comparison checks execute?",
+        options: {
+          A: "n comparisons",
+          B: "n - 1 comparisons",
+          C: "n / 2 comparisons",
+          D: "n² comparisons"
+        },
+        correct: "B",
+        targetWord: "MIN",
+        explanation: "Pass 1 compares the candidate at index 0 against the remaining n - 1 items, requiring exactly n - 1 comparisons.",
+        hp: 90
       },
       {
         id: 6,
         stageLabel: "Stage 2-3",
-        monsterType: 'slime',
-        category: "Databases & SQL",
-        prompt: "Which SQL clause filters records based on specified search criteria?",
-        snippet: "SELECT id, username, email \nFROM users \n_____ is_active = true;",
-        targetWord: "WHERE",
-        clue: "5 letters • Starts with W • Filters query results",
-        bonusWords: ["SELECT", "FROM", "GROUP", "ORDER", "TABLE", "QUERY", "INDEX", "JOIN"],
+        monsterType: 'spider',
+        category: "Asymptotic Complexity",
+        prompt: "What is the overall Big-O time complexity of Selection Sort in best, average, and worst cases?",
+        snippet: "Best Case:    O(???)\nAverage Case: O(???)\nWorst Case:   O(???)\n# No early breaks exist in Selection Sort",
+        options: {
+          A: "O(n)",
+          B: "O(n log n)",
+          C: "O(n²)",
+          D: "O(1)"
+        },
+        correct: "C",
+        targetWord: "BIGO",
+        explanation: "Because Selection Sort always scans the entire unsorted portion regardless of initial order, its time complexity is O(n²) in all cases.",
         hp: 90
       },
       {
         id: 7,
         stageLabel: "Stage 3-1",
-        monsterType: 'dragon',
-        category: "Control Flow",
-        prompt: "Which statement terminates the current loop, switch, or labelled block immediately?",
-        snippet: "while (true) {\n  if (queue.isEmpty()) {\n    _____; // Terminate loop execution\n  }\n}",
-        targetWord: "BREAK",
-        clue: "5 letters • Starts with B • Opposite of CONTINUE",
-        bonusWords: ["WHILE", "LOOP", "FOR", "CASE", "GOTO", "RETURN", "YIELD"],
-        hp: 110
+        monsterType: 'phantom',
+        category: "Mathematical Proof",
+        prompt: "What is the mathematical formula for total comparisons T(n) across all passes?",
+        snippet: "T(n) = (n - 1) + (n - 2) + (n - 3) + ... + 2 + 1\nArithmetic Series Formula:\nSum = n * (first + last) / 2 = ???",
+        options: {
+          A: "n(n - 1) / 2",
+          B: "n² + n",
+          C: "n / 2",
+          D: "n(n + 1)"
+        },
+        correct: "A",
+        targetWord: "SUM",
+        explanation: "Summing 1 through n - 1 gives (n - 1)(n) / 2 = n(n - 1) / 2 total comparisons.",
+        hp: 90
       },
       {
         id: 8,
         stageLabel: "Stage 3-2",
         monsterType: 'phantom',
-        category: "Data Structures & Trees",
-        prompt: "What hierarchical nonlinear data structure consists of nodes connected by edges with a root node?",
-        snippet: "class TreeNode {\n  int val;\n  TreeNode left, right; // Binary _____\n}",
-        targetWord: "TREE",
-        clue: "4 letters • Has leaves, branches, and root",
-        bonusWords: ["NODE", "GRAPH", "EDGE", "ROOT", "LEAF", "TRIE", "HEAP", "DFS", "BFS"],
-        hp: 100
+        category: "Concrete Evaluation",
+        prompt: "If an array has n = 8 elements, how many total comparisons are performed by Selection Sort?",
+        snippet: "n = 8 elements\nT(8) = 8 * (8 - 1) / 2\n     = (8 * 7) / 2\n     = 56 / 2 = ???",
+        options: {
+          A: "15 comparisons",
+          B: "21 comparisons",
+          C: "28 comparisons",
+          D: "64 comparisons"
+        },
+        correct: "C",
+        targetWord: "EIGHT",
+        explanation: "For n = 8: comparisons = 7 + 6 + 5 + 4 + 3 + 2 + 1 = 8 * 7 / 2 = 28 comparisons.",
+        hp: 90
       },
       {
         id: 9,
         stageLabel: "Stage 3-3",
-        monsterType: 'spider',
-        category: "Type Systems & Memory",
-        prompt: "Which primitive value represents the intentional absence of any object value or reference in JavaScript?",
-        snippet: "let userProfile = _____; // Explicitly set to represent empty object reference",
-        targetWord: "NULL",
-        clue: "4 letters • Distinct from undefined",
-        bonusWords: ["VOID", "NIL", "NONE", "ZERO", "EMPTY", "UNDEFINED", "TYPE"],
-        hp: 95
+        monsterType: 'phantom',
+        category: "Implementation Mechanics",
+        prompt: "In a typical Python implementation, what does the variable `minpos` (or `min_idx`) track?",
+        snippet: "minpos = i\nfor j in range(i + 1, n):\n    if arr[j] < arr[minpos]:\n        minpos = j # What information does minpos hold?",
+        options: {
+          A: "The maximum value found in the array",
+          B: "The index of the minimum value in the unsorted portion",
+          C: "The total size of the array",
+          D: "The count of swaps performed"
+        },
+        correct: "B",
+        targetWord: "INDEX",
+        explanation: "`minpos` tracks the index location of the smallest element discovered so far in the current unsorted slice arr[i...n-1].",
+        hp: 90
       },
       {
         id: 10,
-        stageLabel: "Stage 4-Boss",
+        stageLabel: "Stage 4-1",
         monsterType: 'dragon',
-        category: "Cloud & DevOps",
-        prompt: "What platform packages code and all its dependencies into standardized lightweight containers?",
-        snippet: "FROM node:20-alpine\nCOPY . .\nRUN npm install\n# Running inside a _____ container",
-        targetWord: "DOCKER",
-        clue: "6 letters • Iconic blue whale logo",
-        bonusWords: ["IMAGE", "CONTAINER", "BUILD", "DEPLOY", "CLOUD", "LINUX", "SERVER"],
-        hp: 130
+        category: "Loop Boundary Logic",
+        prompt: "Why does the outer loop of Selection Sort only need to run up to index `size - 1` (or `n - 1`)?",
+        snippet: "for i in range(size - 1): # Why stop at size - 1 instead of size?\n    # After n - 1 smallest items are in place...",
+        options: {
+          A: "When n - 1 items are sorted, the last remaining element is already in place by default",
+          B: "Because the array is empty after n - 1 passes",
+          C: "To prevent a division by zero error in the inner loop",
+          D: "It actually always runs up to size"
+        },
+        correct: "A",
+        targetWord: "LOOP",
+        explanation: "Once the first n - 1 smallest elements are moved to their correct sorted positions, the 1 remaining element must already be the largest.",
+        hp: 90
+      },
+      {
+        id: 11,
+        stageLabel: "Stage 4-2",
+        monsterType: 'dragon',
+        category: "Memory Usage",
+        prompt: "Which statement best describes Selection Sort regarding memory usage and auxiliary space?",
+        snippet: "Auxiliary Space Complexity = O(1)\nDoes Selection Sort allocate secondary buffers?",
+        options: {
+          A: "It is an out-of-place algorithm requiring O(n) extra memory",
+          B: "It is an in-place sorting algorithm requiring O(1) auxiliary space",
+          C: "It requires O(log n) stack memory for recursion",
+          D: "It has exponential memory overhead"
+        },
+        correct: "B",
+        targetWord: "SPACE",
+        explanation: "Selection Sort sorts directly within the input array by swapping values, requiring only O(1) constant auxiliary space for pointers.",
+        hp: 90
+      },
+      {
+        id: 12,
+        stageLabel: "Stage 4-3",
+        monsterType: 'dragon',
+        category: "State Evolution",
+        prompt: "How does the sorted portion of the array change after each completed pass?",
+        snippet: "Pass 0: sorted = 1 item\nPass 1: sorted = 2 items\nPass 2: sorted = 3 items\n...",
+        options: {
+          A: "It shrinks by one item from the right",
+          B: "It stays the exact same size",
+          C: "It grows by one item from the left",
+          D: "It doubles in size each pass"
+        },
+        correct: "C",
+        targetWord: "GROW",
+        explanation: "Each pass locks in one additional minimum element at index i, so the sorted prefix grows by one item from left to right.",
+        hp: 90
+      },
+      {
+        id: 13,
+        stageLabel: "Stage 5-1",
+        monsterType: 'kraken',
+        category: "Best Case Behavior",
+        prompt: "What is the behavior and comparison count of Selection Sort if the input list is already sorted?",
+        snippet: "Input: [1, 2, 3, 4, 5] (Pre-sorted)\nDoes Selection Sort know it is sorted?",
+        options: {
+          A: "It finishes in O(n) time automatically using an early break",
+          B: "It performs the exact same number of comparisons as a reverse-sorted list: O(n²)",
+          C: "It throws a runtime index out of bounds error",
+          D: "It uses recursion to bypass comparisons"
+        },
+        correct: "B",
+        targetWord: "SAME",
+        explanation: "Selection Sort has no early-termination flag: it still compares every pair in the unsorted portion to guarantee finding the minimum.",
+        hp: 90
+      },
+      {
+        id: 14,
+        stageLabel: "Stage 5-2",
+        monsterType: 'kraken',
+        category: "Asymptotic Simplification",
+        prompt: "Why does the formula T(n) = (n² - n) / 2 simplify to Big-O notation O(n²)?",
+        snippet: "T(n) = 0.5 * n² - 0.5 * n\nAs n -> infinity, which term dominates?",
+        options: {
+          A: "In asymptotic analysis, lower-order terms (-n) and constants (/2) are dropped",
+          B: "Because division by 2 is mathematically illegal in Big-O",
+          C: "Because n is assumed to be zero",
+          D: "Because swap steps dominate comparison operations"
+        },
+        correct: "A",
+        targetWord: "ORDER",
+        explanation: "In Big-O notation, we drop the lower order term (-n/2) and constant multiplier (1/2), leaving the dominant quadratic term O(n²).",
+        hp: 90
+      },
+      {
+        id: 15,
+        stageLabel: "Stage 5-3",
+        monsterType: 'kraken',
+        category: "Swap Step Precision",
+        prompt: "What exact action is taken during the 'Swap' step of Selection Sort at outer index `i`?",
+        snippet: "# At outer index i:\n# minpos has been determined from scanning arr[i...n-1]\narr[i], arr[minpos] = arr[minpos], arr[i]",
+        options: {
+          A: "Swap the largest element with the last element of the entire array",
+          B: "Swap the minimum found in the unsorted part with the first spot of the unsorted part (arr[i])",
+          C: "Swap adjacent elements if arr[j] > arr[j + 1]",
+          D: "Swap the first and last elements unconditionally"
+        },
+        correct: "B",
+        targetWord: "SWAP",
+        explanation: "The minimum element identified at `minpos` is swapped into the first index `i` of the current unsorted partition.",
+        hp: 90
       }
     ];
+
+    const QUIZ_QUESTIONS = SELECTION_SORT_QUESTIONS;
 
     // Scrabble-style letter points
     const LETTER_POINTS = {
@@ -2084,7 +2470,14 @@ PI = 4; // TypeError: Assignment to constant</code></pre>
 
     // 6. MAIN GAME ENGINE
     class GameEngine {
-      constructor() {
+      constructor(playerName = 'Lex The Hacker') {
+        this.playerName = playerName;
+        this.sessionId = 'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6);
+        this.monstersDefeated = 0;
+        this.triviaCorrect = 0;
+        this.quizScore = 0; // Exactly 1 point per correct answer, 0 to 15
+        this.isAnsweringQuestion = false;
+
         // Player state
         this.playerHp = 100;
         this.playerMaxHp = 100;
@@ -2103,8 +2496,8 @@ PI = 4; // TypeError: Assignment to constant</code></pre>
         // Monster & question state
         this.currentQuestion = null;
         this.currentMonster = null;
-        this.bossHp = 80;
-        this.bossMaxHp = 80;
+        this.bossHp = 90;
+        this.bossMaxHp = 90;
         this.bossTurnCountdown = 3;
         this.burnTurnsRemaining = 0;
 
@@ -2135,12 +2528,14 @@ PI = 4; // TypeError: Assignment to constant</code></pre>
           bossHpBar: document.getElementById('boss-hp-bar'),
           bossTurnTimer: document.getElementById('boss-turn-timer'),
           bossTurnPips: document.getElementById('boss-turn-pips'),
-          // Terminal DOM
+          // Center Terminal & Quiz DOM
           questionCategory: document.getElementById('question-category'),
+          questionProgressBadge: document.getElementById('question-progress-badge'),
+          quizScoreBadge: document.getElementById('quiz-score-badge'),
           targetWordHint: document.getElementById('target-word-hint'),
           questionPrompt: document.getElementById('question-prompt'),
           questionSnippet: document.getElementById('question-snippet'),
-          questionClueText: document.getElementById('question-clue-text'),
+          mcOptionBtns: document.querySelectorAll('.mc-option-btn'),
           currentWordSlots: document.getElementById('current-word-slots'),
           letterGrid: document.getElementById('letter-grid'),
           wordEvalPill: document.getElementById('word-eval-pill'),
@@ -2153,9 +2548,12 @@ PI = 4; // TypeError: Assignment to constant</code></pre>
           btnHelp: document.getElementById('btn-help'),
           modalHelp: document.getElementById('modal-help'),
           modalVictory: document.getElementById('modal-victory'),
+          modalGrandVictory: document.getElementById('modal-grand-victory'),
           modalGameOver: document.getElementById('modal-gameover'),
           btnNextStage: document.getElementById('btn-next-stage'),
           btnRestart: document.getElementById('btn-restart'),
+          btnGrandVictoryRestart: document.getElementById('btn-grand-victory-restart'),
+          btnGrandVictoryAdmin: document.getElementById('btn-grand-victory-admin'),
           // Powerups
           itemCoffee: document.getElementById('item-coffee'),
           itemCoffeeCount: document.getElementById('item-coffee-count'),
@@ -2168,7 +2566,51 @@ PI = 4; // TypeError: Assignment to constant</code></pre>
         };
 
         this.initEventListeners();
+        this.updatePlayerNameDisplay();
         this.loadStage(0);
+      }
+
+      updatePlayerNameDisplay() {
+        const hudName = document.getElementById('hud-player-name');
+        if (hudName) hudName.textContent = this.playerName;
+        if (this.dom && this.dom.heroTitle) this.dom.heroTitle.textContent = this.playerName;
+        const vicPlayer = document.getElementById('victory-player');
+        if (vicPlayer) vicPlayer.textContent = this.playerName;
+        const grandPlayer = document.getElementById('grand-victory-player');
+        if (grandPlayer) grandPlayer.textContent = this.playerName;
+        const goPlayer = document.getElementById('gameover-player');
+        if (goPlayer) goPlayer.textContent = this.playerName;
+      }
+
+      setPlayerName(name) {
+        this.playerName = name;
+        this.sessionId = 'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6);
+        this.monstersDefeated = 0;
+        this.triviaCorrect = 0;
+        this.quizScore = 0;
+        this.updatePlayerNameDisplay();
+      }
+
+      saveCurrentSession(status) {
+        const record = {
+          sessionId: this.sessionId,
+          player: this.playerName,
+          score: this.quizScore,
+          totalPoints: this.score,
+          monsters: this.monstersDefeated,
+          trivia: this.quizScore,
+          stage: this.stageIndex + 1,
+          status: status,
+          date: new Date().toISOString()
+        };
+        const records = loadLeaderboard();
+        const existingIdx = records.findIndex(r => r.sessionId === this.sessionId);
+        if (existingIdx >= 0) {
+          records[existingIdx] = record;
+        } else {
+          records.unshift(record);
+        }
+        saveLeaderboard(records.slice(0, 200));
       }
 
       initEventListeners() {
@@ -2185,6 +2627,21 @@ PI = 4; // TypeError: Assignment to constant</code></pre>
         this.dom.btnNextStage.addEventListener('click', () => this.nextStage());
         this.dom.btnRestart.addEventListener('click', () => this.restartGame());
 
+        // Grand Victory Modal Buttons
+        if (this.dom.btnGrandVictoryRestart) {
+          this.dom.btnGrandVictoryRestart.addEventListener('click', () => this.restartGame());
+        }
+        if (this.dom.btnGrandVictoryAdmin) {
+          this.dom.btnGrandVictoryAdmin.addEventListener('click', () => showAdminModal());
+        }
+
+        // Multiple Choice Option Button Clicks
+        this.dom.mcOptionBtns.forEach(btn => {
+          btn.addEventListener('click', () => {
+            this.submitAnswer(btn.dataset.option);
+          });
+        });
+
         // Word Action Buttons
         this.dom.btnSubmit.addEventListener('click', () => this.submitWord());
         this.dom.btnClear.addEventListener('click', () => this.clearSelection());
@@ -2198,6 +2655,24 @@ PI = 4; // TypeError: Assignment to constant</code></pre>
 
         // Keyboard Typing Event Handler
         window.addEventListener('keydown', (e) => {
+          // If typing in an input or textarea, let default typing happen
+          if (e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA')) {
+            return;
+          }
+
+          // If login modal is open, ignore game typing
+          const entryModal = document.getElementById('modal-player-entry');
+          if (entryModal && !entryModal.classList.contains('hidden')) {
+            return;
+          }
+
+          // If admin modal is open, ignore game typing (allow Escape to close)
+          const adminModal = document.getElementById('modal-admin');
+          if (adminModal && !adminModal.classList.contains('hidden')) {
+            if (e.key === 'Escape') hideAdminModal();
+            return;
+          }
+
           if (!this.dom.modalHelp.classList.contains('hidden')) {
             if (e.key === 'Escape') this.toggleHelpModal(false);
             return;
@@ -2206,8 +2681,19 @@ PI = 4; // TypeError: Assignment to constant</code></pre>
             if (e.key === 'Enter') this.nextStage();
             return;
           }
+          if (this.dom.modalGrandVictory && !this.dom.modalGrandVictory.classList.contains('hidden')) {
+            if (e.key === 'Enter') this.restartGame();
+            return;
+          }
           if (!this.dom.modalGameOver.classList.contains('hidden')) {
             if (e.key === 'Enter') this.restartGame();
+            return;
+          }
+
+          // Number keys 1, 2, 3, 4 trigger Multiple-Choice selection (A, B, C, D)
+          if (['1', '2', '3', '4'].includes(e.key) && !e.ctrlKey && !e.altKey && !e.metaKey) {
+            const optMap = { '1': 'A', '2': 'B', '3': 'C', '4': 'D' };
+            this.submitAnswer(optMap[e.key]);
             return;
           }
 
@@ -2250,10 +2736,19 @@ PI = 4; // TypeError: Assignment to constant</code></pre>
         this.stageIndex = index;
         const qIndex = index % QUIZ_QUESTIONS.length;
         this.currentQuestion = QUIZ_QUESTIONS[qIndex];
-        this.currentMonster = MONSTERS[this.currentQuestion.monsterType] || MONSTERS.spider;
+        this.currentMonster = MONSTERS[this.currentQuestion.monsterType] || MONSTERS.slime;
 
-        this.bossHp = this.currentQuestion.hp;
-        this.bossMaxHp = this.currentQuestion.hp;
+        // Monster HP: 90 total per monster across 3 questions (30 HP per question)
+        this.bossMaxHp = 90;
+        const monsterPass = this.stageIndex % 3;
+        if (monsterPass === 0) {
+          this.bossHp = 90;
+        } else if (monsterPass === 1) {
+          this.bossHp = Math.min(60, this.bossHp > 0 ? this.bossHp : 60);
+        } else if (monsterPass === 2) {
+          this.bossHp = Math.min(30, this.bossHp > 0 ? this.bossHp : 30);
+        }
+
         this.bossTurnCountdown = 3;
         this.burnTurnsRemaining = 0;
 
@@ -2276,10 +2771,38 @@ PI = 4; // TypeError: Assignment to constant</code></pre>
         this.dom.questionCategory.textContent = `[ ${this.currentQuestion.category} ]`;
         this.dom.questionPrompt.textContent = this.currentQuestion.prompt;
         this.dom.questionSnippet.textContent = this.currentQuestion.snippet;
-        this.dom.questionClueText.textContent = this.currentQuestion.clue;
 
-        const len = this.currentQuestion.targetWord.length;
-        this.dom.targetWordHint.textContent = `${this.currentQuestion.targetWord[0]} ${'_ '.repeat(len - 1).trim()}`;
+        if (this.dom.questionProgressBadge) {
+          this.dom.questionProgressBadge.textContent = `Q ${this.stageIndex + 1} / 15`;
+        }
+        if (this.dom.quizScoreBadge) {
+          this.dom.quizScoreBadge.textContent = `⭐ ${this.quizScore} / 15 PTS`;
+        }
+        if (this.dom.targetWordHint) {
+          this.dom.targetWordHint.textContent = this.currentQuestion.targetWord;
+        }
+
+        // Render Multiple Choice Options A, B, C, D
+        this.isAnsweringQuestion = false;
+        this.dom.mcOptionBtns.forEach(btn => {
+          const optKey = btn.dataset.option;
+          const optText = (this.currentQuestion.options && this.currentQuestion.options[optKey]) || '';
+          const textEl = btn.querySelector('.mc-option-text');
+          if (textEl) textEl.textContent = optText;
+
+          const icon = btn.querySelector('.mc-feedback-icon');
+          if (icon) {
+            icon.textContent = '';
+            icon.classList.add('hidden');
+          }
+
+          btn.disabled = false;
+          btn.className = 'mc-option-btn w-full p-2.5 rounded-xl bg-slate-900/90 hover:bg-slate-800 border-2 border-slate-800 hover:border-cyber-neonCyan transition flex items-start gap-2.5 text-left group cursor-pointer';
+          const badge = btn.querySelector('.mc-letter-badge');
+          if (badge) {
+            badge.className = 'mc-letter-badge w-6 h-6 rounded-lg bg-slate-800 group-hover:bg-cyan-500/20 text-cyber-neonCyan font-mono font-bold text-xs flex items-center justify-center flex-shrink-0 border border-slate-700';
+          }
+        });
 
         this.updateBossHpBar();
         this.updateHeroHpBar();
@@ -2481,7 +3004,7 @@ PI = 4; // TypeError: Assignment to constant</code></pre>
         this.dom.wordEvalPill.classList.remove('hidden');
 
         const isTarget = word === this.currentQuestion.targetWord;
-        const isBonus = this.currentQuestion.bonusWords.includes(word);
+        const isBonus = Array.isArray(this.currentQuestion.bonusWords) && this.currentQuestion.bonusWords.includes(word);
         const isTech = TECH_WORDS.has(word);
         const isEnglish = COMMON_WORDS.has(word);
 
@@ -2500,7 +3023,7 @@ PI = 4; // TypeError: Assignment to constant</code></pre>
 
         if (isTarget) {
           const totalDmg = Math.round(basePts * 5 * lengthMultiplier * gemMultiplier);
-          this.dom.wordEvalType.innerHTML = '<span class="text-amber-400 font-bold">⭐ TRIVIA SOLUTION!</span>';
+          this.dom.wordEvalType.innerHTML = '<span class="text-amber-400 font-bold">⭐ BONUS TECH WORD!</span>';
           this.dom.wordEvalPts.textContent = `⚡ ${totalDmg} DMG (5x CRIT)`;
           this.dom.wordEvalPts.className = 'text-amber-300 font-bold';
         } else if (isTech || isBonus) {
@@ -2528,7 +3051,7 @@ PI = 4; // TypeError: Assignment to constant</code></pre>
         }
 
         const isTarget = word === this.currentQuestion.targetWord;
-        const isBonus = this.currentQuestion.bonusWords.includes(word);
+        const isBonus = Array.isArray(this.currentQuestion.bonusWords) && this.currentQuestion.bonusWords.includes(word);
         const isTech = TECH_WORDS.has(word);
         const isEnglish = COMMON_WORDS.has(word);
 
@@ -2564,7 +3087,7 @@ PI = 4; // TypeError: Assignment to constant</code></pre>
 
         if (isTarget) {
           wordTypeMultiplier = 5.0;
-          bannerText = '⭐ 5x SUPER CRITICAL HIT!';
+          bannerText = '⭐ 5x BONUS WORD CRITICAL!';
         } else if (isTech || isBonus) {
           wordTypeMultiplier = 2.5;
           bannerText = '⚡ 2.5x TECH COMBO!';
@@ -2593,15 +3116,131 @@ PI = 4; // TypeError: Assignment to constant</code></pre>
         this.spawnFloatingText(this.dom.currentWordSlots, reason, 'text-rose-400 font-bold');
       }
 
+      // MULTIPLE CHOICE QUIZ SUBMISSION (A, B, C, D)
+      submitAnswer(optionKey) {
+        if (this.isAnsweringQuestion) return;
+        this.isAnsweringQuestion = true;
+
+        const isCorrect = optionKey === this.currentQuestion.correct;
+        const selectedBtn = Array.from(this.dom.mcOptionBtns).find(b => b.dataset.option === optionKey);
+        const correctBtn = Array.from(this.dom.mcOptionBtns).find(b => b.dataset.option === this.currentQuestion.correct);
+
+        // Lock all buttons during animation
+        this.dom.mcOptionBtns.forEach(b => b.disabled = true);
+
+        if (isCorrect) {
+          this.quizScore++;
+          this.triviaCorrect = this.quizScore;
+          this.score += 100;
+          this.dom.scoreText.textContent = this.score.toLocaleString();
+          if (this.dom.quizScoreBadge) {
+            this.dom.quizScoreBadge.textContent = `⭐ ${this.quizScore} / 15 PTS`;
+          }
+
+          sound.playQuizCorrect();
+
+          // Green button styling
+          if (selectedBtn) {
+            selectedBtn.className = 'mc-option-btn w-full p-2.5 rounded-xl bg-emerald-950/70 border-2 border-emerald-400 text-white transition flex items-start gap-2.5 text-left shadow-lg shadow-emerald-500/20';
+            const icon = selectedBtn.querySelector('.mc-feedback-icon');
+            if (icon) {
+              icon.textContent = '✓ +1 POINT';
+              icon.className = 'mc-feedback-icon text-xs font-bold font-mono text-emerald-400 ml-auto flex-shrink-0';
+              icon.classList.remove('hidden');
+            }
+            const badge = selectedBtn.querySelector('.mc-letter-badge');
+            if (badge) badge.className = 'mc-letter-badge w-6 h-6 rounded-lg bg-emerald-500 text-slate-950 font-mono font-bold text-xs flex items-center justify-center flex-shrink-0';
+          }
+
+          // Hero attack animation & laser
+          this.dom.heroAvatar.classList.add('hero-attack-lunge');
+          setTimeout(() => this.dom.heroAvatar.classList.remove('hero-attack-lunge'), 350);
+
+          const heroRect = this.dom.heroAvatar.getBoundingClientRect();
+          const monsterRect = this.dom.monsterAvatar.getBoundingClientRect();
+          fx.shootLaser(
+            heroRect.left + heroRect.width / 2, heroRect.top + heroRect.height / 2,
+            monsterRect.left + monsterRect.width / 2, monsterRect.top + monsterRect.height / 2,
+            '#05ffa1', true
+          );
+
+          const dmg = 30;
+          setTimeout(() => {
+            this.bossHp = Math.max(0, this.bossHp - dmg);
+            sound.playMonsterHurt();
+            this.dom.monsterAvatar.classList.add('monster-hurt');
+            setTimeout(() => this.dom.monsterAvatar.classList.remove('monster-hurt'), 450);
+            this.spawnFloatingText(this.dom.bossHpBar, `-30 DMG! CORRECT! ⭐`, 'text-emerald-300 text-sm sm:text-base font-black');
+            this.updateBossHpBar();
+          }, 150);
+
+        } else {
+          sound.playQuizWrong();
+
+          // Red button styling
+          if (selectedBtn) {
+            selectedBtn.className = 'mc-option-btn w-full p-2.5 rounded-xl bg-rose-950/70 border-2 border-rose-500 text-white transition flex items-start gap-2.5 text-left shake-error';
+            const icon = selectedBtn.querySelector('.mc-feedback-icon');
+            if (icon) {
+              icon.textContent = '✗ INCORRECT (0 PT)';
+              icon.className = 'mc-feedback-icon text-xs font-bold font-mono text-rose-400 ml-auto flex-shrink-0';
+              icon.classList.remove('hidden');
+            }
+            const badge = selectedBtn.querySelector('.mc-letter-badge');
+            if (badge) badge.className = 'mc-letter-badge w-6 h-6 rounded-lg bg-rose-500 text-white font-mono font-bold text-xs flex items-center justify-center flex-shrink-0';
+          }
+
+          // Highlight correct button in green for clear feedback
+          if (correctBtn && correctBtn !== selectedBtn) {
+            setTimeout(() => {
+              correctBtn.className = 'mc-option-btn w-full p-2.5 rounded-xl bg-slate-900/90 border-2 border-emerald-500/70 text-slate-100 transition flex items-start gap-2.5 text-left';
+              const icon = correctBtn.querySelector('.mc-feedback-icon');
+              if (icon) {
+                icon.textContent = '✓ Correct Answer';
+                icon.className = 'mc-feedback-icon text-xs font-bold font-mono text-emerald-400 ml-auto flex-shrink-0';
+                icon.classList.remove('hidden');
+              }
+            }, 200);
+          }
+
+          // Monster counter-attacks
+          setTimeout(() => {
+            sound.playMonsterAttack();
+            this.dom.monsterAvatar.classList.add('monster-attack-lunge');
+            setTimeout(() => this.dom.monsterAvatar.classList.remove('monster-attack-lunge'), 400);
+
+            this.playerHp = Math.max(0, this.playerHp - 10);
+            this.updateHeroHpBar();
+            this.dom.heroAvatar.classList.add('hero-hurt');
+            setTimeout(() => this.dom.heroAvatar.classList.remove('hero-hurt'), 400);
+            this.spawnFloatingText(this.dom.heroHpBar, `-10 HP! MONSTER COUNTER!`, 'text-rose-400 font-bold');
+          }, 250);
+        }
+
+        // Advance question or trigger victory
+        setTimeout(() => {
+          if (this.playerHp <= 0) {
+            this.handleGameOver();
+            return;
+          }
+
+          if (this.stageIndex >= 14) {
+            this.handleGrandVictory();
+          } else if (this.stageIndex % 3 === 2 || this.bossHp <= 0) {
+            this.handleStageVictory(this.currentQuestion.targetWord, 30);
+          } else {
+            this.loadStage(this.stageIndex + 1);
+          }
+        }, 1350);
+      }
+
       executeAttackSequence(damage, isTarget, bannerText, effects) {
         // Hero lunge animation
         this.dom.heroAvatar.classList.add('hero-attack-lunge');
         setTimeout(() => this.dom.heroAvatar.classList.remove('hero-attack-lunge'), 350);
 
-        // Sound
         sound.playAttackBeam(isTarget);
 
-        // Laser FX shooting from Hero straight into Monster!
         const heroRect = this.dom.heroAvatar.getBoundingClientRect();
         const monsterRect = this.dom.monsterAvatar.getBoundingClientRect();
 
@@ -2629,7 +3268,7 @@ PI = 4; // TypeError: Assignment to constant</code></pre>
           this.spawnFloatingText(this.dom.bossName, '🔥 OVERHEAT BURN!', 'text-amber-400 font-bold');
         }
 
-        // Apply Monster Damage after laser lands
+        // Apply Monster Damage
         setTimeout(() => {
           this.bossHp = Math.max(0, this.bossHp - damage);
           this.score += damage * 10;
@@ -2637,11 +3276,9 @@ PI = 4; // TypeError: Assignment to constant</code></pre>
 
           sound.playMonsterHurt();
 
-          // Monster Hurt Shake & Flash Animation
           this.dom.monsterAvatar.classList.add('monster-hurt');
           setTimeout(() => this.dom.monsterAvatar.classList.remove('monster-hurt'), 450);
 
-          // Floating damage text over monster
           this.spawnFloatingText(
             this.dom.bossHpBar,
             `-${damage} DMG! ${bannerText}`,
@@ -2651,24 +3288,27 @@ PI = 4; // TypeError: Assignment to constant</code></pre>
           this.updateBossHpBar();
           this.replenishUsedTiles();
 
-          // Check if Monster is Slain!
-          if (this.bossHp <= 0 || isTarget) {
-            // Play Monster Defeat Animation
+          if (this.bossHp <= 0) {
             this.dom.monsterAvatar.classList.add('monster-defeat');
             fx.spawnParticles(endX, endY, 50, ['#ff007f', '#00f3ff', '#ffe600', '#ffffff']);
 
             setTimeout(() => {
-              this.handleStageVictory(effects.word, damage);
+              if (this.stageIndex >= 14) {
+                this.handleGrandVictory();
+              } else if (this.stageIndex % 3 === 2) {
+                this.handleStageVictory(effects.word, damage);
+              } else {
+                this.spawnFloatingText(this.dom.bossHpBar, 'PASS COMPLETE! ADVANCING...', 'text-cyan-300 font-bold');
+                setTimeout(() => this.loadStage(this.stageIndex + 1), 600);
+              }
             }, 750);
           } else {
-            // Process monster turn
             this.processBossTurn();
           }
         }, 150);
       }
 
       processBossTurn() {
-        // Burn damage over time check
         if (this.burnTurnsRemaining > 0) {
           this.burnTurnsRemaining--;
           const burnDmg = 15;
@@ -2679,18 +3319,22 @@ PI = 4; // TypeError: Assignment to constant</code></pre>
           if (this.bossHp <= 0) {
             this.dom.monsterAvatar.classList.add('monster-defeat');
             setTimeout(() => {
-              this.handleStageVictory('BURNOUT', burnDmg);
+              if (this.stageIndex >= 14) {
+                this.handleGrandVictory();
+              } else if (this.stageIndex % 3 === 2) {
+                this.handleStageVictory('BURNOUT', burnDmg);
+              } else {
+                this.loadStage(this.stageIndex + 1);
+              }
             }, 700);
             return;
           }
         }
 
-        // Decrement monster attack countdown
         this.bossTurnCountdown--;
         this.updateBossTurnDisplay();
 
         if (this.bossTurnCountdown <= 0) {
-          // MONSTER ATTACKS HERO!
           this.monsterAttackPlayer();
           this.bossTurnCountdown = 3;
           this.updateBossTurnDisplay();
@@ -2700,7 +3344,6 @@ PI = 4; // TypeError: Assignment to constant</code></pre>
       monsterAttackPlayer() {
         sound.playMonsterAttack();
 
-        // Monster lunges forward towards hero
         this.dom.monsterAvatar.classList.add('monster-attack-lunge');
         setTimeout(() => this.dom.monsterAvatar.classList.remove('monster-attack-lunge'), 400);
 
@@ -2710,7 +3353,6 @@ PI = 4; // TypeError: Assignment to constant</code></pre>
           this.playerHp = Math.max(0, this.playerHp - monsterDmg);
           this.updateHeroHpBar();
 
-          // Hero hurt wobble
           this.dom.heroAvatar.classList.add('hero-hurt');
           setTimeout(() => this.dom.heroAvatar.classList.remove('hero-hurt'), 400);
 
@@ -2763,6 +3405,9 @@ PI = 4; // TypeError: Assignment to constant</code></pre>
         fx.spawnConfetti();
 
         this.streak++;
+        this.monstersDefeated = Math.min(5, Math.floor(this.stageIndex / 3) + 1);
+        this.saveCurrentSession('STAGE CLEARED');
+
         this.dom.streakText.textContent = this.streak;
         this.dom.streakFlame.style.opacity = Math.min(1, 0.4 + this.streak * 0.2);
 
@@ -2772,36 +3417,100 @@ PI = 4; // TypeError: Assignment to constant</code></pre>
           this.updateInventoryDisplay();
         }
 
-        // Fill victory modal
-        document.getElementById('victory-monster').textContent = this.currentMonster.name;
-        document.getElementById('victory-answer').textContent = this.currentQuestion.targetWord;
-        document.getElementById('victory-dmg').textContent = `+${damageDealt} DMG (${winningWord})`;
-        document.getElementById('victory-score').textContent = this.score.toLocaleString();
-        document.getElementById('victory-streak').textContent = `🔥 ${this.streak} Stage Streak`;
+        // Fill stage victory modal
+        const vicPlayer = document.getElementById('victory-player');
+        if (vicPlayer) vicPlayer.textContent = this.playerName;
+        const vicMonster = document.getElementById('victory-monster');
+        if (vicMonster) vicMonster.textContent = this.currentMonster.name;
+        const vicSub = document.getElementById('victory-subtitle');
+        if (vicSub) vicSub.textContent = `${this.currentMonster.name} disintegrated! Stage ${this.stageIndex + 1}/15 Complete.`;
+        const vicAns = document.getElementById('victory-answer');
+        if (vicAns) vicAns.textContent = this.currentQuestion.targetWord;
+        const vicDmg = document.getElementById('victory-dmg');
+        if (vicDmg) vicDmg.textContent = `+${damageDealt} DMG (${winningWord})`;
+        const vicScore = document.getElementById('victory-score');
+        if (vicScore) vicScore.textContent = `${this.quizScore} / 15 (${this.score.toLocaleString()} PTS)`;
+        const vicStreak = document.getElementById('victory-streak');
+        if (vicStreak) vicStreak.textContent = `🔥 ${this.monstersDefeated} Monsters Defeated`;
 
         setTimeout(() => {
           this.dom.modalVictory.classList.remove('hidden');
         }, 500);
       }
 
+      handleGrandVictory() {
+        sound.playVictoryFanfare();
+        fx.spawnConfetti();
+
+        this.monstersDefeated = 5;
+        this.saveCurrentSession('CHALLENGE COMPLETE');
+
+        const grandPlayer = document.getElementById('grand-victory-player');
+        if (grandPlayer) grandPlayer.textContent = this.playerName;
+
+        const grandScore = document.getElementById('grand-victory-score');
+        if (grandScore) grandScore.textContent = `${this.quizScore}`;
+
+        const ratingEl = document.getElementById('grand-victory-rating');
+        if (ratingEl) {
+          if (this.quizScore === 15) {
+            ratingEl.textContent = '🏆 PERFECT 15/15 SELECTION SORT MASTER';
+            ratingEl.className = 'inline-block mt-2 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-amber-500/20 text-cyber-neonYellow border border-amber-500/40';
+          } else if (this.quizScore >= 12) {
+            ratingEl.textContent = '⭐ ALGORITHM ARCHITECT';
+            ratingEl.className = 'inline-block mt-2 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-emerald-500/20 text-cyber-neonGreen border border-emerald-500/40';
+          } else if (this.quizScore >= 8) {
+            ratingEl.textContent = '💻 SELECTION SORT SPECIALIST';
+            ratingEl.className = 'inline-block mt-2 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-cyan-500/20 text-cyber-neonCyan border border-cyan-500/40';
+          } else {
+            ratingEl.textContent = '🛠️ APPRENTICE CODER';
+            ratingEl.className = 'inline-block mt-2 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-purple-500/20 text-purple-300 border border-purple-500/40';
+          }
+        }
+
+        if (this.dom.modalGrandVictory) {
+          this.dom.modalGrandVictory.classList.remove('hidden');
+          this.dom.modalGrandVictory.classList.add('flex');
+        }
+      }
+
       nextStage() {
         this.dom.modalVictory.classList.add('hidden');
-        this.loadStage(this.stageIndex + 1);
+        if (this.stageIndex < 14) {
+          this.loadStage(this.stageIndex + 1);
+        } else {
+          this.handleGrandVictory();
+        }
       }
 
       handleGameOver() {
-        document.getElementById('gameover-score').textContent = this.score.toLocaleString();
-        document.getElementById('gameover-stages').textContent = `${this.stageIndex} Stages Completed`;
+        this.saveCurrentSession('FATAL CRASH');
+        const goPlayer = document.getElementById('gameover-player');
+        if (goPlayer) goPlayer.textContent = this.playerName;
+        document.getElementById('gameover-score').textContent = `${this.quizScore} / 15 (${this.score.toLocaleString()} PTS)`;
+        document.getElementById('gameover-stages').textContent = `${this.monstersDefeated} Monsters Defeated`;
+        const goTrivia = document.getElementById('gameover-trivia');
+        if (goTrivia) goTrivia.textContent = `${this.quizScore} / 15 Correct`;
         this.dom.modalGameOver.classList.remove('hidden');
       }
 
       restartGame() {
-        this.dom.modalGameOver.classList.add('hidden');
+        if (this.dom.modalGameOver) this.dom.modalGameOver.classList.add('hidden');
+        if (this.dom.modalVictory) this.dom.modalVictory.classList.add('hidden');
+        if (this.dom.modalGrandVictory) {
+          this.dom.modalGrandVictory.classList.add('hidden');
+          this.dom.modalGrandVictory.classList.remove('flex');
+        }
+        this.sessionId = 'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6);
+        this.monstersDefeated = 0;
+        this.triviaCorrect = 0;
+        this.quizScore = 0;
         this.playerHp = 100;
         this.score = 0;
         this.streak = 0;
         this.dom.streakText.textContent = '0';
         this.dom.scoreText.textContent = '0';
+        if (this.dom.quizScoreBadge) this.dom.quizScoreBadge.textContent = '⭐ 0 / 15 PTS';
         this.inventory = { coffee: 2, scramble: 3, debug: 2, burst: 1 };
         this.loadStage(0);
       }
@@ -2986,187 +3695,292 @@ PI = 4; // TypeError: Assignment to constant</code></pre>
       try { localStorage.setItem(LEADERBOARD_KEY, JSON.stringify(records)); } catch (e) { }
     }
 
-    function addLeaderboardRecord(entry) {
-      const records = loadLeaderboard();
-      records.unshift(entry);
-      saveLeaderboard(records.slice(0, 200)); // cap at 200 entries
-    }
-
     // =========================================================================
     // ADMIN LEADERBOARD MODAL RENDERER
     // =========================================================================
-    let adminSortKey = 'score';
-    let adminSortDir = -1;
-    let adminFilter = '';
-
     function renderAdminModal() {
       const records = loadLeaderboard();
+      const searchInput = document.getElementById('admin-search-input');
+      const sortSelect = document.getElementById('admin-sort-select');
+      const filter = (searchInput ? searchInput.value : '').trim().toLowerCase();
+      const sortMode = sortSelect ? sortSelect.value : 'score-desc';
+
       const filtered = records.filter(r =>
-        !adminFilter || (r.player || '').toLowerCase().includes(adminFilter.toLowerCase())
+        !filter || (r.player || '').toLowerCase().includes(filter)
       );
+
       const sorted = [...filtered].sort((a, b) => {
-        const av = a[adminSortKey] ?? 0;
-        const bv = b[adminSortKey] ?? 0;
-        if (typeof av === 'string') return adminSortDir * av.localeCompare(bv);
-        return adminSortDir * (av - bv);
+        if (sortMode === 'date-desc') {
+          return new Date(b.date || 0) - new Date(a.date || 0);
+        } else if (sortMode === 'monsters-desc') {
+          return (b.monsters || 0) - (a.monsters || 0);
+        } else if (sortMode === 'name-asc') {
+          return (a.player || '').localeCompare(b.player || '');
+        } else {
+          // Default: score-desc
+          return (b.score || 0) - (a.score || 0);
+        }
       });
 
-      // KPI cards
+      // Quick KPI stats
       const totalSessions = records.length;
       const highScore = records.reduce((mx, r) => Math.max(mx, r.score || 0), 0);
       const totalMonsters = records.reduce((s, r) => s + (r.monsters || 0), 0);
       const totalTrivia = records.reduce((s, r) => s + (r.trivia || 0), 0);
 
-      document.getElementById('admin-kpi-sessions').textContent = totalSessions;
-      document.getElementById('admin-kpi-highscore').textContent = highScore.toLocaleString();
-      document.getElementById('admin-kpi-monsters').textContent = totalMonsters;
-      document.getElementById('admin-kpi-trivia').textContent = totalTrivia;
+      const elSessions = document.getElementById('admin-stat-sessions');
+      const elHighScore = document.getElementById('admin-stat-highscore');
+      const elMonsters = document.getElementById('admin-stat-monsters');
+      const elTrivia = document.getElementById('admin-stat-trivia');
 
-      const tbody = document.getElementById('admin-table-body');
+      if (elSessions) elSessions.textContent = totalSessions;
+      if (elHighScore) elHighScore.textContent = `${highScore} / 15`;
+      if (elMonsters) elMonsters.textContent = totalMonsters;
+      if (elTrivia) elTrivia.textContent = totalTrivia;
+
+      const tbody = document.getElementById('leaderboard-tbody');
+      const emptyState = document.getElementById('admin-empty-state');
+
       if (sorted.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="7" class="text-center py-10 text-slate-500 font-mono">No records yet. Play a game to get on the board!</td></tr>`;
+        if (tbody) tbody.innerHTML = '';
+        if (emptyState) {
+          emptyState.classList.remove('hidden');
+          emptyState.classList.add('flex');
+        }
         return;
       }
 
-      tbody.innerHTML = sorted.map((r, i) => {
-        const date = r.date ? new Date(r.date).toLocaleString() : '—';
-        const statusColor = r.status === 'VICTORY' ? 'text-cyber-neonGreen' : r.status === 'FATAL CRASH' ? 'text-red-400' : 'text-slate-400';
-        const medal = i === 0 && adminSortKey === 'score' && adminSortDir === -1 ? '🥇 ' : (i === 1 ? '🥈 ' : i === 2 ? '🥉 ' : '');
-        return `<tr class="border-t border-slate-800/60 hover:bg-slate-800/40 transition">
-          <td class="py-2 px-3 font-bold font-mono text-cyber-neonCyan">${medal}${r.player || 'Anonymous'}</td>
-          <td class="py-2 px-3 text-right font-mono text-cyber-neonYellow font-bold">${(r.score || 0).toLocaleString()}</td>
-          <td class="py-2 px-3 text-right font-mono text-slate-300">${r.monsters || 0}</td>
-          <td class="py-2 px-3 text-right font-mono text-slate-300">${r.trivia || 0}</td>
-          <td class="py-2 px-3 text-center font-mono text-slate-400">${r.stage || 1}</td>
-          <td class="py-2 px-3 text-center font-mono font-bold ${statusColor}">${r.status || '—'}</td>
-          <td class="py-2 px-3 text-right font-mono text-slate-500 text-xs">${date}</td>
-        </tr>`;
-      }).join('');
+      if (emptyState) {
+        emptyState.classList.add('hidden');
+        emptyState.classList.remove('flex');
+      }
+
+      if (tbody) {
+        tbody.innerHTML = sorted.map((r, i) => {
+          const date = r.date ? new Date(r.date).toLocaleString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : '—';
+          const statusColor = r.status === 'CHALLENGE COMPLETE' || r.status === 'STAGE CLEARED' || r.status === 'VICTORY'
+            ? 'text-cyber-neonGreen font-bold'
+            : r.status === 'FATAL CRASH'
+              ? 'text-rose-400 font-bold'
+              : 'text-slate-400';
+          const rankMedal = i === 0 ? '🥇 1' : i === 1 ? '🥈 2' : i === 2 ? '🥉 3' : `${i + 1}`;
+          const scoreDisplay = `${r.score ?? 0} / 15`;
+          return `<tr class="border-t border-slate-800/60 hover:bg-slate-800/40 transition font-mono">
+            <td class="py-2.5 px-3 font-bold text-slate-400">${rankMedal}</td>
+            <td class="py-2.5 px-3 font-bold text-cyber-neonCyan truncate max-w-[130px]">${r.player || 'Anonymous'}</td>
+            <td class="py-2.5 px-3 text-cyber-neonYellow font-bold">${scoreDisplay}</td>
+            <td class="py-2.5 px-3 text-slate-200">${r.monsters || 0}</td>
+            <td class="py-2.5 px-3 text-slate-200">${r.trivia || 0}</td>
+            <td class="py-2.5 px-3 text-slate-400">Stage ${r.stage || 1}</td>
+            <td class="py-2.5 px-3 font-semibold ${statusColor}">${r.status || 'ACTIVE'}</td>
+            <td class="py-2.5 px-3 text-right text-slate-500 text-[11px]">${date}</td>
+          </tr>`;
+        }).join('');
+      }
     }
 
-    function showAdminModal(fromGame) {
+    function showAdminModal() {
       renderAdminModal();
       const modal = document.getElementById('modal-admin');
-      modal.classList.remove('hidden');
-      modal.classList.add('flex');
-      // Store context — if shown from player entry screen, close should go back there
-      modal._fromPlayerEntry = !!fromGame;
+      if (modal) {
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+      }
     }
 
     function hideAdminModal() {
       const modal = document.getElementById('modal-admin');
-      modal.classList.add('hidden');
-      modal.classList.remove('flex');
+      if (modal) {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+      }
     }
 
     function showPlayerEntryModal() {
       const modal = document.getElementById('modal-player-entry');
-      modal.classList.remove('hidden');
-      modal.classList.add('flex');
-      setTimeout(() => document.getElementById('player-name-input').focus(), 100);
+      if (modal) {
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+      }
+      setTimeout(() => {
+        const inp = document.getElementById('player-name-input');
+        if (inp) {
+          inp.focus();
+          inp.select();
+        }
+      }, 100);
     }
 
     function hidePlayerEntryModal() {
       const modal = document.getElementById('modal-player-entry');
-      modal.classList.add('hidden');
-      modal.classList.remove('flex');
+      if (modal) {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+      }
     }
 
     // =========================================================================
     // INITIALIZE GAME ON DOM CONTENT LOADED
     // =========================================================================
-    let game;
-    window.addEventListener('DOMContentLoaded', () => {
+    let game = null;
 
-      // --- Player Entry Modal Logic ---
+    function handleStartGame() {
+      const inp = document.getElementById('player-name-input');
+      const raw = inp ? inp.value.trim() : '';
+      const playerName = raw || RANDOM_HANDLES[Math.floor(Math.random() * RANDOM_HANDLES.length)];
+      if (inp) inp.value = playerName;
+
+      hidePlayerEntryModal();
+
+      if (!game) {
+        game = new GameEngine(playerName);
+      } else {
+        game.setPlayerName(playerName);
+        game.restartGame();
+      }
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      // 1. Show player name modal on first load
       showPlayerEntryModal();
 
-      // Random handle generator
-      document.getElementById('btn-random-name').addEventListener('click', () => {
-        const h = RANDOM_HANDLES[Math.floor(Math.random() * RANDOM_HANDLES.length)];
-        document.getElementById('player-name-input').value = h;
-        document.getElementById('player-name-input').focus();
-      });
+      // 2. Random name generator
+      const btnRand = document.getElementById('btn-random-name');
+      if (btnRand) {
+        btnRand.addEventListener('click', () => {
+          const h = RANDOM_HANDLES[Math.floor(Math.random() * RANDOM_HANDLES.length)];
+          const inp = document.getElementById('player-name-input');
+          if (inp) {
+            inp.value = h;
+            inp.focus();
+          }
+        });
+      }
 
-      // Preset name buttons
+      // 3. Preset name buttons
       document.querySelectorAll('.preset-name-btn').forEach(btn => {
         btn.addEventListener('click', () => {
-          document.getElementById('player-name-input').value = btn.textContent.trim();
-          document.getElementById('player-name-input').focus();
+          const inp = document.getElementById('player-name-input');
+          if (inp) {
+            inp.value = btn.textContent.trim();
+            inp.focus();
+          }
         });
       });
 
-      // Start game form submit
-      document.getElementById('btn-start-game').addEventListener('click', () => {
-        const raw = document.getElementById('player-name-input').value.trim();
-        const playerName = raw || RANDOM_HANDLES[Math.floor(Math.random() * RANDOM_HANDLES.length)];
-        hidePlayerEntryModal();
-        game = new GameEngine(playerName);
-      });
+      // 4. Start game button and form submit
+      const btnStart = document.getElementById('btn-start-game');
+      if (btnStart) {
+        btnStart.addEventListener('click', (e) => {
+          e.preventDefault();
+          handleStartGame();
+        });
+      }
 
-      // Also allow Enter key inside the form
-      document.getElementById('form-player-entry').addEventListener('submit', (e) => {
-        e.preventDefault();
-        document.getElementById('btn-start-game').click();
-      });
+      const formEntry = document.getElementById('form-player-entry');
+      if (formEntry) {
+        formEntry.addEventListener('submit', (e) => {
+          e.preventDefault();
+          handleStartGame();
+        });
+      }
 
-      // View leaderboard from start screen
-      document.getElementById('btn-view-leaderboard-start').addEventListener('click', () => {
-        showAdminModal(false);
-      });
+      // 5. Leaderboard button on start screen
+      const btnViewStart = document.getElementById('btn-view-leaderboard-start');
+      if (btnViewStart) {
+        btnViewStart.addEventListener('click', () => showAdminModal());
+      }
 
-      // --- Admin Modal Logic ---
-      // Close buttons
+      // 6. Header HUD buttons
+      const btnAdminHeader = document.getElementById('btn-admin');
+      if (btnAdminHeader) {
+        btnAdminHeader.addEventListener('click', () => showAdminModal());
+      }
+
+      const btnChangePlayer = document.getElementById('btn-change-player');
+      if (btnChangePlayer) {
+        btnChangePlayer.addEventListener('click', () => showPlayerEntryModal());
+      }
+
+      // 7. Victory & Game Over admin buttons
+      const btnVicAdmin = document.getElementById('btn-victory-admin');
+      if (btnVicAdmin) {
+        btnVicAdmin.addEventListener('click', () => showAdminModal());
+      }
+
+      const btnGoAdmin = document.getElementById('btn-gameover-admin');
+      if (btnGoAdmin) {
+        btnGoAdmin.addEventListener('click', () => showAdminModal());
+      }
+
+      const btnGrandVicRestart = document.getElementById('btn-grand-victory-restart');
+      if (btnGrandVicRestart) {
+        btnGrandVicRestart.addEventListener('click', () => {
+          if (game) game.restartGame();
+        });
+      }
+
+      const btnGrandVicAdmin = document.getElementById('btn-grand-victory-admin');
+      if (btnGrandVicAdmin) {
+        btnGrandVicAdmin.addEventListener('click', () => showAdminModal());
+      }
+
+      // 8. Admin modal close buttons
       ['btn-close-admin', 'btn-close-admin-bottom'].forEach(id => {
         const el = document.getElementById(id);
-        if (el) el.addEventListener('click', () => {
-          hideAdminModal();
-          if (!game) showPlayerEntryModal();
-        });
-      });
-
-      // Search input
-      document.getElementById('admin-search-input').addEventListener('input', (e) => {
-        adminFilter = e.target.value;
-        renderAdminModal();
-      });
-
-      // Sort headers
-      document.querySelectorAll('[data-sort]').forEach(th => {
-        th.style.cursor = 'pointer';
-        th.addEventListener('click', () => {
-          const key = th.dataset.sort;
-          if (adminSortKey === key) adminSortDir *= -1;
-          else { adminSortKey = key; adminSortDir = -1; }
-          renderAdminModal();
-        });
-      });
-
-      // Clear history
-      document.getElementById('btn-clear-history').addEventListener('click', () => {
-        if (confirm('⚠️ Clear ALL session records from local storage? This cannot be undone.')) {
-          saveLeaderboard([]);
-          renderAdminModal();
+        if (el) {
+          el.addEventListener('click', () => {
+            hideAdminModal();
+            if (!game) showPlayerEntryModal();
+          });
         }
       });
 
-      // Export JSON
-      document.getElementById('btn-export-json').addEventListener('click', () => {
-        const records = loadLeaderboard();
-        const blob = new Blob([JSON.stringify(records, null, 2)], { type: 'application/json' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = 'byteworm_leaderboard.json';
-        a.click();
-        URL.revokeObjectURL(url);
-      });
+      // 9. Admin search & sort
+      const adminSearch = document.getElementById('admin-search-input');
+      if (adminSearch) {
+        adminSearch.addEventListener('input', () => renderAdminModal());
+      }
 
-      // Switch / New coder button
-      document.getElementById('btn-new-player-session').addEventListener('click', () => {
-        hideAdminModal();
-        showPlayerEntryModal();
-      });
+      const adminSort = document.getElementById('admin-sort-select');
+      if (adminSort) {
+        adminSort.addEventListener('change', () => renderAdminModal());
+      }
+
+      // 10. Clear history
+      const btnClear = document.getElementById('btn-clear-history');
+      if (btnClear) {
+        btnClear.addEventListener('click', () => {
+          if (confirm('⚠️ Clear ALL session records from local storage? This cannot be undone.')) {
+            saveLeaderboard([]);
+            renderAdminModal();
+          }
+        });
+      }
+
+      // 11. Export JSON
+      const btnExport = document.getElementById('btn-export-history');
+      if (btnExport) {
+        btnExport.addEventListener('click', () => {
+          const records = loadLeaderboard();
+          const blob = new Blob([JSON.stringify(records, null, 2)], { type: 'application/json' });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `byteworm_leaderboard_${Date.now()}.json`;
+          a.click();
+          URL.revokeObjectURL(url);
+        });
+      }
+
+      // 12. Switch / New player button inside Admin Modal
+      const btnNewPlayer = document.getElementById('btn-new-player-session');
+      if (btnNewPlayer) {
+        btnNewPlayer.addEventListener('click', () => {
+          hideAdminModal();
+          showPlayerEntryModal();
+        });
+      }
     });
   </script>
 </body>
